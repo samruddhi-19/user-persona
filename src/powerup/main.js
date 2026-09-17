@@ -1,7 +1,10 @@
 /* global TrelloPowerUp */
 import { isAuthorized } from "../lib/auth.js";
 
-const ICON_URL = "./icons/icon.svg";
+const ICON_URL =
+  typeof window !== "undefined" && window.location.origin
+    ? `${window.location.origin}/icons/icon.svg`
+    : "./icons/icon.svg";
 
 TrelloPowerUp.initialize({
   // Trello queries this capability to decide whether to prompt the member to authorize
@@ -37,7 +40,15 @@ TrelloPowerUp.initialize({
           light: ICON_URL,
         },
         text: "User Personaa",
-        callback: function (t) {
+        callback: async function (t) {
+          const authorized = await isAuthorized(t);
+          if (!authorized) {
+            return t.popup({
+              title: "Authorize User Personaa",
+              url: "./auth.html",
+              height: 320,
+            });
+          }
           return t.popup({
             title: "User Personaa Settings",
             url: "./settings.html",
