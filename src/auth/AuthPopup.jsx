@@ -61,19 +61,18 @@ export default function AuthPopup({ t }) {
     const width = 580;
     const height = 750;
 
-    // Center popup on user's active monitor / browser window
-    const screenLeft = window.screenLeft !== undefined ? window.screenLeft : (window.screenX || 0);
-    const screenTop = window.screenTop !== undefined ? window.screenTop : (window.screenY || 0);
-    const clientWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
-    const clientHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+    // Use monitor screen dimensions (window.screen), NOT iframe window.innerWidth
+    // (inside Trello's iframe, innerWidth is only ~300px which caused left to evaluate to 0)
+    const screenWidth = window.screen?.availWidth || window.screen?.width || 1280;
+    const screenHeight = window.screen?.availHeight || window.screen?.height || 800;
 
-    const left = Math.round(screenLeft + (clientWidth - width) / 2);
-    const top = Math.round(screenTop + (clientHeight - height) / 2);
+    const left = Math.max(0, Math.round((screenWidth - width) / 2));
+    const top = Math.max(0, Math.round((screenHeight - height) / 2));
 
     popupRef.current = window.open(
       authUrl,
       "trelloAuthPopup",
-      `width=${width},height=${height},left=${Math.max(0, left)},top=${Math.max(0, top)},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes`
+      `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes`
     );
 
     // If popup was blocked by browser pop-up blocker
