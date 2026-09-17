@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Personaa — Trello Power-Up Dev Sandbox</title>
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-color: #0f1215;
+        --surface: #181d22;
+        --surface-card: #20262d;
+        --border: #2d3640;
+        --primary: #579dff;
+        --primary-accent: #8546ff;
+        --accent-gradient: linear-gradient(135deg, #579dff 0%, #8546ff 50%, #ec4899 100%);
+        --text: #f7f8f9;
+        --text-subtle: #9fadbc;
+        --success: #4bce97;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg-color);
+        color: var(--text);
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 20px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo-group {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .logo-icon {
+        width: 42px;
+        height: 42px;
+      }
+
+      h1 {
+        font-family: "Outfit", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.3px;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .tagline {
+        font-size: 13px;
+        color: var(--text-subtle);
+        margin: 2px 0 0;
+      }
+
+      .badge-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        background: rgba(75, 206, 151, 0.15);
+        color: var(--success);
+        border: 1px solid rgba(75, 206, 151, 0.3);
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 8px var(--success);
+      }
+
+      main {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+
+      .grid-layout {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 28px;
+      }
+
+      @media (max-width: 900px) {
+        .grid-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .card h2 {
+        font-family: "Outfit", sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 14px;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-pills {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .nav-pill {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: var(--surface-card);
+        border: 1px solid transparent;
+        color: var(--text);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .nav-pill:hover,
+      .nav-pill.active {
+        border-color: var(--primary);
+        background: rgba(87, 157, 255, 0.12);
+        color: var(--primary);
+      }
+
+      .preview-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .preview-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px 12px 0 0;
+        padding: 12px 20px;
+        border-bottom: none;
+      }
+
+      .preview-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .preview-iframe-wrapper {
+        background: #1d2125;
+        border: 1px solid var(--border);
+        border-radius: 0 0 12px 12px;
+        overflow: hidden;
+        height: 480px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      iframe {
+        width: 100%;
+        max-width: 440px;
+        height: 380px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+        background: #1d2125;
+      }
+
+      .step-item {
+        display: flex;
+        gap: 12px;
+        font-size: 12.5px;
+        color: var(--text-subtle);
+        margin-bottom: 12px;
+      }
+
+      .step-num {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(87, 157, 255, 0.2);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      code {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #e2e8f0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo-group">
+        <img src="./icons/icon.svg" alt="User Personaa" class="logo-icon" />
+        <div>
+          <h1>User Personaa</h1>
+          <p class="tagline">Trello Power-Up Architecture & Dev Workbench</p>
+        </div>
+      </div>
+      <div class="badge-status">
+        <span class="dot"></span>
+        <span>Auth Flow Ready</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="grid-layout">
+        <!-- Sidebar Navigation & Config -->
+        <div>
+          <div class="card">
+            <h2>Popup Previews</h2>
+            <div class="nav-pills">
+              <button class="nav-pill active" onclick="switchPreview('./auth.html', 'Authorization Popup (auth.html)', this)">
+                <span>Authorization Popup</span>
+                <code>auth.html</code>
+              </button>
+              <button class="nav-pill" onclick="switchPreview('./settings.html', 'Settings Popup (settings.html)', this)">
+                <span>Settings & Account</span>
+                <code>settings.html</code>
+              </button>
+              <button class="nav-pill" onclick="switchPreview('./powerup.html', 'Connector Iframe (powerup.html)', this)">
+                <span>Connector Iframe</span>
+                <code>powerup.html</code>
+              </button>
+              <button class="nav-pill" onclick="switchPreview('./authorized.html', 'OAuth Callback (authorized.html)', this)">
+                <span>OAuth Return</span>
+                <code>authorized.html</code>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Trello Setup Checklist</h2>
+            <div class="step-item">
+              <span class="step-num">1</span>
+              <div>Register Power-Up at <code>trello.com/power-ups/admin</code></div>
+            </div>
+            <div class="step-item">
+              <span class="step-num">2</span>
+              <div>Set <b>Iframe connector URL</b> to <code>&lt;origin&gt;/powerup.html</code></div>
+            </div>
+            <div class="step-item">
+              <span class="step-num">3</span>
+              <div>Add <code>&lt;origin&gt;</code> to <b>Allowed Origins</b></div>
+            </div>
+            <div class="step-item">
+              <span class="step-num">4</span>
+              <div>Copy <b>API Key</b> into <code>.env</code> as <code>VITE_TRELLO_APP_KEY</code></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Preview Area -->
+        <div class="preview-container">
+          <div class="card" style="margin-bottom: 0; padding: 0; overflow: hidden;">
+            <div class="preview-header">
+              <span class="preview-title" id="preview-heading">Authorization Popup (auth.html)</span>
+              <a id="direct-link" href="./auth.html" target="_blank" style="color: var(--primary); font-size: 12px; text-decoration: none;">
+                Open in new tab ↗
+              </a>
+            </div>
+            <div class="preview-iframe-wrapper">
+              <iframe id="preview-frame" src="./auth.html"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function switchPreview(url, title, el) {
+        document.getElementById("preview-frame").src = url;
+        document.getElementById("preview-heading").textContent = title;
+        document.getElementById("direct-link").href = url;
+
+        document.querySelectorAll(".nav-pill").forEach(function(pill) {
+          pill.classList.remove("active");
+        });
+        if (el) el.classList.add("active");
+      }
+    </script>
+  </body>
+</html>

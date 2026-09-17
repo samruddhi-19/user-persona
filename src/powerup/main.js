@@ -1,0 +1,111 @@
+/* global TrelloPowerUp */
+import { isAuthorized } from "../lib/auth.js";
+
+const ICON_URL = "./icons/icon.svg";
+
+TrelloPowerUp.initialize({
+  // Trello queries this capability to decide whether to prompt the member to authorize
+  "authorization-status": async function (t) {
+    const authorized = await isAuthorized(t);
+    return { authorized };
+  },
+
+  // Called when Trello prompts authorization
+  "show-authorization": function (t) {
+    return t.popup({
+      title: "Authorize User Personaa",
+      url: "./auth.html",
+      height: 320,
+    });
+  },
+
+  // Called when member opens Power-Up settings from the board menu
+  "show-settings": function (t) {
+    return t.popup({
+      title: "User Personaa Settings",
+      url: "./settings.html",
+      height: 280,
+    });
+  },
+
+  // Adds a User Personaa button in the top board header
+  "board-buttons": function () {
+    return [
+      {
+        icon: {
+          dark: ICON_URL,
+          light: ICON_URL,
+        },
+        text: "User Personaa",
+        callback: function (t) {
+          return t.popup({
+            title: "User Personaa Settings",
+            url: "./settings.html",
+            height: 280,
+          });
+        },
+      },
+    ];
+  },
+
+  // Adds a User Persona button on the back of every card
+  "card-buttons": function () {
+    return [
+      {
+        icon: ICON_URL,
+        text: "User Persona",
+        callback: async function (t) {
+          const authorized = await isAuthorized(t);
+          if (!authorized) {
+            return t.popup({
+              title: "Authorize User Personaa",
+              url: "./auth.html",
+              height: 320,
+            });
+          }
+          return t.popup({
+            title: "User Personaa Settings",
+            url: "./settings.html",
+            height: 280,
+          });
+        },
+      },
+    ];
+  },
+
+  // Badge displayed on the front of cards
+  "card-badges": async function (t) {
+    // Allows attaching persona badges to cards
+    const persona = await t.get("card", "shared", "persona");
+    if (!persona || !persona.name) return [];
+
+    return [
+      {
+        text: persona.name,
+        icon: ICON_URL,
+        color: persona.color || "purple",
+      },
+    ];
+  },
+
+  // Badge displayed in the card back detail section
+  "card-detail-badges": async function (t) {
+    const persona = await t.get("card", "shared", "persona");
+    if (!persona || !persona.name) return [];
+
+    return [
+      {
+        title: "User Persona",
+        text: persona.name,
+        color: persona.color || "purple",
+        callback: function (t) {
+          return t.popup({
+            title: "User Personaa Settings",
+            url: "./settings.html",
+            height: 280,
+          });
+        },
+      },
+    ];
+  },
+});
