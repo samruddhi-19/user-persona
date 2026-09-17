@@ -58,10 +58,22 @@ export default function AuthPopup({ t }) {
     const returnUrl = `${window.location.origin}/authorized.html`;
     const authUrl = buildAuthorizeUrl(returnUrl);
 
+    const width = 580;
+    const height = 750;
+
+    // Center popup on user's active monitor / browser window
+    const screenLeft = window.screenLeft !== undefined ? window.screenLeft : (window.screenX || 0);
+    const screenTop = window.screenTop !== undefined ? window.screenTop : (window.screenY || 0);
+    const clientWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+    const clientHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+
+    const left = Math.round(screenLeft + (clientWidth - width) / 2);
+    const top = Math.round(screenTop + (clientHeight - height) / 2);
+
     popupRef.current = window.open(
       authUrl,
       "trelloAuthPopup",
-      "width=560,height=720,menubar=no,toolbar=no,location=no,status=no"
+      `width=${width},height=${height},left=${Math.max(0, left)},top=${Math.max(0, top)},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes`
     );
 
     // If popup was blocked by browser pop-up blocker
