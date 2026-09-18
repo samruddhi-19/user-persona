@@ -51,6 +51,7 @@ TrelloPowerUp.initialize({
           }
           return t.modal({
             title: "User Personas",
+            accentColor: "#1D2125",
             url: "./personas.html",
             fullscreen: true,
           });
@@ -76,6 +77,7 @@ TrelloPowerUp.initialize({
           }
           return t.modal({
             title: "User Personas",
+            accentColor: "#1D2125",
             url: "./personas.html",
             fullscreen: true,
           });
