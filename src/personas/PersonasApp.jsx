@@ -544,76 +544,154 @@ export default function PersonasApp({ t }) {
           </div>
         ) : personas.length === 0 ? (
           /* ==========================================================================
-             INITIAL EMPTY STATE: Shown when no personas exist yet
+             OPTION 1: SPLIT 2-COLUMN HERO & LIVE PERSONA BLUEPRINT
+             Balanced 50/50 landscape layout utilizing full horizontal modal width
              ========================================================================== */
-          <div className="personas-empty-state">
-            <div className="empty-state-graphic">
-              <EmptyPersonaIllustration width={130} height={130} />
-            </div>
-            <h2 className="empty-state-title">No User Personas Yet</h2>
-            <p className="empty-state-desc">
-              Bring your real users into your sprint board. Create personas to document who
-              you are building for, highlight critical pain points, and attach personas
-              directly to user stories and cards.
-            </p>
+          <div className="personas-split-layout">
+            <div className="personas-split-container">
+              {/* Left Column: Value Prop, CTAs & Quick Archetype Chips */}
+              <div className="split-hero-left">
+                <div className="split-badge-pill">
+                  <span className="split-badge-dot"></span>
+                  <span>Customer Empathy in Every Card</span>
+                </div>
 
-            <div className="empty-state-actions">
-              <button
-                type="button"
-                className="btn-add-persona"
-                style={{ padding: "10px 22px", fontSize: "14px" }}
-                onClick={openCreateModal}
-              >
-                <PlusIcon width={18} height={18} />
-                <span>Create First Persona</span>
-              </button>
+                <h1 className="split-hero-title">
+                  Connect real user empathy <br />
+                  to your sprint cards
+                </h1>
 
-              <button
-                type="button"
-                className="btn-draft-ai"
-                style={{ padding: "10px 22px", fontSize: "14px" }}
-                onClick={() => setIsAiModalOpen(true)}
-              >
-                <SparklesIcon width={18} height={18} />
-                <span>Draft with AI</span>
-              </button>
-
-              <button
-                type="button"
-                className="btn-load-demo"
-                onClick={handleLoadDemoPersonas}
-              >
-                Load Demo Personas
-              </button>
-            </div>
-
-            {/* Feature overview cards */}
-            <div className="empty-features-grid">
-              <div className="empty-feature-item">
-                <h4 className="empty-feature-title">
-                  <span style={{ color: "#0C66E4" }}>●</span> Customer Empathy
-                </h4>
-                <p className="empty-feature-text">
-                  Keep design and engineering teams united on real user goals throughout every sprint.
+                <p className="split-hero-desc">
+                  Define user personas with target roles, pain points, and motivations.
+                  Attach them directly to Trello cards so engineering and design stay aligned
+                  on who you're building for.
                 </p>
+
+                <div className="split-hero-actions">
+                  <button
+                    type="button"
+                    className="btn-create-hero"
+                    onClick={openCreateModal}
+                  >
+                    <PlusIcon width={16} height={16} />
+                    <span>Create Persona</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn-draft-hero"
+                    onClick={() => setIsAiModalOpen(true)}
+                  >
+                    <SparklesIcon width={16} height={16} />
+                    <span>Draft with AI</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn-sample-hero"
+                    onClick={handleLoadDemoPersonas}
+                  >
+                    Load Sample Personas
+                  </button>
+                </div>
+
+                <div className="split-quick-archetypes">
+                  <span className="quick-archetypes-label">Quick 1-click archetypes:</span>
+                  <div className="quick-chips-row">
+                    {AI_TEMPLATES.map((tmpl, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        className="quick-chip-btn"
+                        onClick={() => {
+                          setAiSelectedTemplate(idx);
+                          setIsAiModalOpen(true);
+                        }}
+                      >
+                        {tmpl.role}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              <div className="empty-feature-item">
-                <h4 className="empty-feature-title">
-                  <span style={{ color: "#DE350B" }}>●</span> Pain Points & Motivations
-                </h4>
-                <p className="empty-feature-text">
-                  Clearly document friction areas and what drives your users to choose your solution.
-                </p>
-              </div>
+              {/* Right Column: Live Persona Blueprint Preview Card */}
+              <div className="split-hero-right">
+                <div className="blueprint-wrapper">
+                  <div className="blueprint-header-tag">
+                    <span className="blueprint-live-indicator"></span>
+                    <span>Interactive Persona Blueprint</span>
+                  </div>
 
-              <div className="empty-feature-item">
-                <h4 className="empty-feature-title">
-                  <span style={{ color: "#22A06B" }}>●</span> Card Badge Integration
-                </h4>
-                <p className="empty-feature-text">
-                  Attach personas to cards with glanceable front badges and back-of-card detail sections.
-                </p>
+                  <div className="blueprint-card">
+                    <div className="blueprint-card-top">
+                      <div className="blueprint-avatar-wrapper">
+                        <img
+                          src="./avatars/maya.jpg"
+                          alt="Maya Lin"
+                          className="blueprint-avatar-img"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                            e.currentTarget.nextSibling.style.display = "flex";
+                          }}
+                        />
+                        <div className="blueprint-avatar-fallback" style={{ display: "none" }}>
+                          M
+                        </div>
+                      </div>
+
+                      <div className="blueprint-meta">
+                        <div className="blueprint-name-row">
+                          <h3 className="blueprint-name">Maya Lin</h3>
+                          <span className="blueprint-sample-badge">Sample Card</span>
+                        </div>
+                        <p className="blueprint-role">Senior Product Designer</p>
+                        <div className="blueprint-tags-row">
+                          <span className="blueprint-badge-age">Age 31</span>
+                          <span className="blueprint-badge-cat">Core Designer</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="blueprint-quote-box">
+                      "If engineering doesn't know who they are building for, the feature is already at risk."
+                    </div>
+
+                    <div className="blueprint-section">
+                      <div className="blueprint-section-header">
+                        <span className="section-dot pain-dot"></span>
+                        <span className="blueprint-section-title pain-title">PAIN POINTS</span>
+                      </div>
+                      <div className="blueprint-pill pain-pill">
+                        Disconnected user feedback scattered across Jira, Slack, & emails
+                      </div>
+                    </div>
+
+                    <div className="blueprint-section">
+                      <div className="blueprint-section-header">
+                        <span className="section-dot mot-dot"></span>
+                        <span className="blueprint-section-title mot-title">MOTIVATIONS</span>
+                      </div>
+                      <div className="blueprint-pill mot-pill">
+                        Advocating for the end-user throughout every engineering ticket
+                      </div>
+                    </div>
+
+                    <div className="blueprint-footer">
+                      <div className="blueprint-attach-info">
+                        <CardsStackIcon width={14} height={14} />
+                        <span>Attaches directly to Trello Cards</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="blueprint-adopt-btn"
+                        onClick={handleLoadDemoPersonas}
+                      >
+                        Explore Demo Personas →
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
