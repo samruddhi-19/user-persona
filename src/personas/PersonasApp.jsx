@@ -12,8 +12,23 @@ import {
   CheckIcon,
   MailIcon,
   PinIcon,
+  UserPersonaIcon,
+  ImageIcon,
+  FileSpreadsheetIcon,
 } from "../lib/icons.jsx";
 import "./personas.css";
+
+// Preset avatars shown in the avatar picker row
+export const PRESET_AVATARS = [
+  { id: "maya", name: "Maya", url: "./avatars/maya.jpg" },
+  { id: "marcus", name: "Marcus", url: "./avatars/marcus.jpg" },
+  { id: "chloe", name: "Chloe", url: "./avatars/chloe.jpg" },
+  { id: "alex", name: "Alex", url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" },
+  { id: "sarah", name: "Sarah", url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80" },
+  { id: "elena", name: "Elena", url: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80" },
+  { id: "david", name: "David", url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
+  { id: "jordan", name: "Jordan", url: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80" },
+];
 
 // The reference sample personas matching the user's design screenshot
 export const SAMPLE_PERSONAS = [
@@ -24,6 +39,7 @@ export const SAMPLE_PERSONAS = [
     age: 31,
     category: "Core Designer",
     avatar: "./avatars/maya.jpg",
+    bio: "Senior UX architect balancing enterprise design systems with fast sprint cycles across cross-functional product squads.",
     quote: '"If engineering doesn\'t know who they are building for, the feature is already at risk."',
     painPoints: [
       "Disconnected user feedback scattered across Jira, Slack, and emails",
@@ -37,6 +53,10 @@ export const SAMPLE_PERSONAS = [
       "Validating design iterations with quantitative survey evidence",
       "Fostering shared customer understanding across product and dev teams",
     ],
+    goals: [
+      "Deliver cohesive user flows that reduce onboarding churn by 25%",
+      "Embed persona empathy directly into technical backlog planning",
+    ],
     attachedCardsCount: 3,
     attachedMembers: ["CCO", "JD", "ML"],
   },
@@ -47,6 +67,7 @@ export const SAMPLE_PERSONAS = [
     age: 42,
     category: "Technical Leader",
     avatar: "./avatars/marcus.jpg",
+    bio: "Full-stack lead focusing on scalable microservices, CI/CD pipeline stability, and clean agile sprint execution.",
     quote: '"Clear context in the card means fewer meetings and faster commits."',
     painPoints: [
       "Vague user stories with no indication of why a feature matters to users",
@@ -60,6 +81,10 @@ export const SAMPLE_PERSONAS = [
       "Eliminating ambiguity in bug tickets and user story cards",
       "Reducing sync meetings through self-documenting agile workflows",
     ],
+    goals: [
+      "Maintain 99.9% sprint delivery accuracy with zero blocker ambiguities",
+      "Reduce developer context-switching through self-contained Trello tickets",
+    ],
     attachedCardsCount: 2,
     attachedMembers: ["CO", "MV"],
   },
@@ -70,6 +95,7 @@ export const SAMPLE_PERSONAS = [
     age: 26,
     category: "Growth & CS",
     avatar: "./avatars/chloe.jpg",
+    bio: "Customer champion tracking retention funnels, user delight scores, and bridging qualitative support feedback to product roadmaps.",
     quote: '"Customers don\'t churn because of missing code, they churn because of unresolved friction."',
     painPoints: [
       "User frustration with slow onboarding and hidden settings",
@@ -82,6 +108,10 @@ export const SAMPLE_PERSONAS = [
       "Championing customer survey insights into actionable board items",
       "Tracking user engagement uplift from newly released features",
       "Bridging marketing campaign expectations with core product flows",
+    ],
+    goals: [
+      "Increase trial-to-paid conversion by fixing top 5 UI bottlenecks",
+      "Unify survey feedback into weekly agile sprint prioritizations",
     ],
     attachedCardsCount: 2,
     attachedMembers: ["CO", "CN"],
@@ -187,19 +217,23 @@ export default function PersonasApp({ t }) {
   const [aiPrompt, setAiPrompt] = useState("");
   const [isAiGenerating, setIsAiGenerating] = useState(false);
 
-  // Form fields
+  // Form fields matching the new persona fields modal
   const [formData, setFormData] = useState({
     name: "",
-    role: "",
     age: 28,
-    category: "",
-    avatar: "",
+    role: "",
+    category: "Target User",
+    avatar: PRESET_AVATARS[0].url,
+    bio: "",
     quote: "",
-    painPoints: [],
-    motivations: [],
+    painPoints: ["", ""],
+    motivations: ["", ""],
+    goals: [""],
+    attachedSurvey: null,
   });
   const [newPainInput, setNewPainInput] = useState("");
   const [newMotInput, setNewMotInput] = useState("");
+  const [newGoalInput, setNewGoalInput] = useState("");
 
   const currentBlueprint = AI_TEMPLATES[blueprintTemplateIdx] || AI_TEMPLATES[0];
 
@@ -278,16 +312,20 @@ export default function PersonasApp({ t }) {
     setEditingPersona(null);
     setFormData({
       name: "",
+      age: 28,
       role: "",
-      age: 29,
       category: "Target User",
-      avatar: "",
+      avatar: PRESET_AVATARS[0].url,
+      bio: "",
       quote: "",
-      painPoints: ["Difficulty navigating complex workflows"],
-      motivations: ["Faster completion of core tasks"],
+      painPoints: ["", ""],
+      motivations: ["", ""],
+      goals: [""],
+      attachedSurvey: null,
     });
     setNewPainInput("");
     setNewMotInput("");
+    setNewGoalInput("");
     setIsFormOpen(true);
   }
 
@@ -295,24 +333,51 @@ export default function PersonasApp({ t }) {
   function openEditModal(persona) {
     setEditingPersona(persona);
     setFormData({
-      name: persona.name,
-      role: persona.role,
-      age: persona.age || 30,
+      name: persona.name || "",
+      age: persona.age || 28,
+      role: persona.role || "",
       category: persona.category || "Target User",
-      avatar: persona.avatar || "",
-      quote: persona.quote || "",
-      painPoints: [...(persona.painPoints || [])],
-      motivations: [...(persona.motivations || [])],
+      avatar: persona.avatar || PRESET_AVATARS[0].url,
+      bio: persona.bio || "",
+      quote: persona.quote ? persona.quote.replace(/^"|"$/g, "") : "",
+      painPoints:
+        persona.painPoints && persona.painPoints.length > 0
+          ? [...persona.painPoints]
+          : ["", ""],
+      motivations:
+        persona.motivations && persona.motivations.length > 0
+          ? [...persona.motivations]
+          : ["", ""],
+      goals:
+        persona.goals && persona.goals.length > 0
+          ? [...persona.goals]
+          : [""],
+      attachedSurvey: persona.attachedSurvey || null,
     });
     setNewPainInput("");
     setNewMotInput("");
+    setNewGoalInput("");
     setIsFormOpen(true);
   }
 
   // Save Persona (Create or Update)
   async function handleSavePersona(e) {
     e.preventDefault();
-    if (!formData.name.trim()) return;
+    if (!formData.name.trim()) {
+      showToast("Please enter a Full Name for the persona.");
+      return;
+    }
+
+    // Clean up empty slots
+    const cleanPains = formData.painPoints.filter((p) => p && p.trim());
+    const cleanMots = formData.motivations.filter((m) => m && m.trim());
+    const cleanGoals = formData.goals.filter((g) => g && g.trim());
+
+    const quoteFormatted = formData.quote.trim()
+      ? formData.quote.trim().startsWith('"')
+        ? formData.quote.trim()
+        : `"${formData.quote.trim()}"`
+      : "";
 
     if (editingPersona) {
       const updated = personas.map((p) =>
@@ -320,9 +385,11 @@ export default function PersonasApp({ t }) {
           ? {
               ...p,
               ...formData,
-              quote: formData.quote.trim().startsWith('"')
-                ? formData.quote.trim()
-                : `"${formData.quote.trim()}"`,
+              age: parseInt(formData.age, 10) || 28,
+              quote: quoteFormatted,
+              painPoints: cleanPains,
+              motivations: cleanMots,
+              goals: cleanGoals,
             }
           : p
       );
@@ -331,12 +398,27 @@ export default function PersonasApp({ t }) {
     } else {
       const newPersona = {
         id: `persona-${Date.now()}`,
-        ...formData,
-        quote: formData.quote.trim()
-          ? formData.quote.trim().startsWith('"')
-            ? formData.quote.trim()
-            : `"${formData.quote.trim()}"`
-          : '"Designing with empathy creates lasting product value."',
+        name: formData.name.trim(),
+        role: formData.role.trim() || "Lead Product Designer",
+        age: parseInt(formData.age, 10) || 28,
+        category: formData.category || "Target User",
+        avatar: formData.avatar || PRESET_AVATARS[0].url,
+        bio: formData.bio.trim(),
+        quote:
+          quoteFormatted || '"I need to know the why behind every requirement."',
+        painPoints:
+          cleanPains.length > 0
+            ? cleanPains
+            : ["Difficulty navigating complex workflows"],
+        motivations:
+          cleanMots.length > 0
+            ? cleanMots
+            : ["Faster completion of core tasks"],
+        goals:
+          cleanGoals.length > 0
+            ? cleanGoals
+            : ["Streamline cross-team agile alignment"],
+        attachedSurvey: formData.attachedSurvey,
         attachedCardsCount: 0,
         attachedMembers: [],
       };
@@ -369,15 +451,13 @@ export default function PersonasApp({ t }) {
     }
   }
 
-  // Add tag helpers in form
-  function handleAddPain() {
-    if (newPainInput.trim()) {
-      setFormData((prev) => ({
-        ...prev,
-        painPoints: [...prev.painPoints, newPainInput.trim()],
-      }));
-      setNewPainInput("");
-    }
+  // Pain points slot handlers
+  function handleUpdatePain(idx, val) {
+    setFormData((prev) => {
+      const updated = [...prev.painPoints];
+      updated[idx] = val;
+      return { ...prev, painPoints: updated };
+    });
   }
 
   function handleRemovePain(idx) {
@@ -387,14 +467,23 @@ export default function PersonasApp({ t }) {
     }));
   }
 
-  function handleAddMot() {
-    if (newMotInput.trim()) {
-      setFormData((prev) => ({
-        ...prev,
-        motivations: [...prev.motivations, newMotInput.trim()],
-      }));
-      setNewMotInput("");
-    }
+  function handleAddPain() {
+    const val = newPainInput.trim();
+    if (!val) return;
+    setFormData((prev) => ({
+      ...prev,
+      painPoints: [...prev.painPoints, val],
+    }));
+    setNewPainInput("");
+  }
+
+  // Motivations slot handlers
+  function handleUpdateMot(idx, val) {
+    setFormData((prev) => {
+      const updated = [...prev.motivations];
+      updated[idx] = val;
+      return { ...prev, motivations: updated };
+    });
   }
 
   function handleRemoveMot(idx) {
@@ -402,6 +491,58 @@ export default function PersonasApp({ t }) {
       ...prev,
       motivations: prev.motivations.filter((_, i) => i !== idx),
     }));
+  }
+
+  function handleAddMot() {
+    const val = newMotInput.trim();
+    if (!val) return;
+    setFormData((prev) => ({
+      ...prev,
+      motivations: [...prev.motivations, val],
+    }));
+    setNewMotInput("");
+  }
+
+  // Primary Goals slot handlers
+  function handleUpdateGoal(idx, val) {
+    setFormData((prev) => {
+      const updated = [...prev.goals];
+      updated[idx] = val;
+      return { ...prev, goals: updated };
+    });
+  }
+
+  function handleRemoveGoal(idx) {
+    setFormData((prev) => ({
+      ...prev,
+      goals: prev.goals.filter((_, i) => i !== idx),
+    }));
+  }
+
+  function handleAddGoal() {
+    const val = newGoalInput.trim();
+    if (!val) return;
+    setFormData((prev) => ({
+      ...prev,
+      goals: [...prev.goals, val],
+    }));
+    setNewGoalInput("");
+  }
+
+  // Survey file attachment handler
+  function handleSurveyFileChange(e) {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        attachedSurvey: {
+          name: file.name,
+          size: `${(file.size / 1024).toFixed(1)} KB`,
+          type: file.name.endsWith(".csv") ? "CSV" : "Excel",
+        },
+      }));
+      showToast(`Attached survey: ${file.name}`);
+    }
   }
 
   // Draft with AI submission
@@ -816,6 +957,13 @@ export default function PersonasApp({ t }) {
                     </div>
                   </div>
 
+                  {/* Persona Bio */}
+                  {persona.bio && (
+                    <div className="persona-bio-box">
+                      <p className="persona-bio-text">{persona.bio}</p>
+                    </div>
+                  )}
+
                   {/* Highlight Quote Box */}
                   {persona.quote && (
                     <div className="persona-quote-box">{persona.quote}</div>
@@ -877,6 +1025,25 @@ export default function PersonasApp({ t }) {
                     </button>
                   )}
 
+                  {/* PRIMARY GOALS Section */}
+                  {persona.goals && persona.goals.length > 0 && (
+                    <>
+                      <div className="section-header" style={{ marginTop: "14px" }}>
+                        <span className="section-dot goal-dot"></span>
+                        <h4 className="section-title goal-title">
+                          PRIMARY GOALS ({persona.goals.length})
+                        </h4>
+                      </div>
+                      <div className="points-list">
+                        {persona.goals.map((goal, idx) => (
+                          <div key={idx} className="point-pill goal-pill">
+                            {goal}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
                   {/* Footer: Attached Cards count & card avatars */}
                   <div className="persona-card-footer">
                     <div className="attached-cards-badge">
@@ -885,6 +1052,20 @@ export default function PersonasApp({ t }) {
                         Attached to {persona.attachedCardsCount || 0} Cards
                       </span>
                     </div>
+
+                    {persona.attachedSurvey && (
+                      <div
+                        className="attached-survey-pill"
+                        title={`Survey: ${persona.attachedSurvey.name}`}
+                      >
+                        <FileSpreadsheetIcon
+                          width={13}
+                          height={13}
+                          style={{ color: "#10B981" }}
+                        />
+                        <span>{persona.attachedSurvey.name}</span>
+                      </div>
+                    )}
 
                     <div className="attached-avatars-group">
                       {(persona.attachedMembers || ["CO", "JD"]).map((initials, i) => (
@@ -902,35 +1083,106 @@ export default function PersonasApp({ t }) {
       </main>
 
       {/* ==========================================================================
-         Add / Edit Persona Modal
+         Create / Edit Persona Modal (Pixel-Perfect to Reference Screenshots)
          ========================================================================== */}
       {isFormOpen && (
-        <div className="modal-overlay" onClick={() => setIsFormOpen(false)}>
-          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div className="modal-title-group">
-                <h3 className="modal-title">
-                  {editingPersona ? "Edit Persona" : "Create New Persona"}
-                </h3>
+        <div className="persona-create-overlay" onClick={() => setIsFormOpen(false)}>
+          <div
+            className="persona-create-dialog"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+          >
+            {/* Blue Banner Header (#0C66E4) */}
+            <div className="persona-create-header">
+              <div className="persona-create-header-left">
+                <div className="persona-create-header-badge">
+                  <UserPersonaIcon width={22} height={22} />
+                </div>
+                <div className="persona-create-header-titles">
+                  <h2 className="persona-create-title">
+                    {editingPersona ? "Edit User Persona" : "Create New User Persona"}
+                  </h2>
+                  <p className="persona-create-subtitle">
+                    Define persona attributes, pain points, and motivations for Trello cards.
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
-                className="btn-subtle-icon"
+                className="persona-create-close-btn"
                 onClick={() => setIsFormOpen(false)}
+                title="Close"
               >
-                <XCloseIcon width={16} height={16} />
+                <XCloseIcon width={18} height={18} />
               </button>
             </div>
 
-            <form onSubmit={handleSavePersona}>
-              <div className="modal-body">
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">Full Name *</label>
+            {/* Scrollable Form Body */}
+            <form onSubmit={handleSavePersona} className="persona-create-form">
+              <div className="persona-create-body">
+                {/* 1. CHOOSE AVATAR Section */}
+                <div className="persona-section-group">
+                  <label className="persona-section-heading">CHOOSE AVATAR</label>
+                  <div className="persona-avatar-picker-row">
+                    <div className="persona-avatar-main-preview">
+                      <img
+                        src={formData.avatar || PRESET_AVATARS[0].url}
+                        alt="Selected Avatar"
+                        className="persona-avatar-preview-img"
+                        onError={(e) => {
+                          e.currentTarget.src = PRESET_AVATARS[0].url;
+                        }}
+                      />
+                    </div>
+                    <div className="persona-avatar-preset-list">
+                      {PRESET_AVATARS.map((av) => (
+                        <button
+                          key={av.id}
+                          type="button"
+                          className={`persona-avatar-preset-btn ${
+                            formData.avatar === av.url ? "selected" : ""
+                          }`}
+                          onClick={() => setFormData({ ...formData, avatar: av.url })}
+                          title={`Select ${av.name}`}
+                        >
+                          <img
+                            src={av.url}
+                            alt={av.name}
+                            className="persona-avatar-preset-img"
+                            onError={(e) => {
+                              e.currentTarget.src = "./avatars/maya.jpg";
+                            }}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="persona-custom-avatar-box">
+                    <span className="persona-custom-avatar-icon">
+                      <ImageIcon width={16} height={16} />
+                    </span>
+                    <input
+                      type="url"
+                      className="persona-custom-avatar-input"
+                      placeholder="Or paste custom image URL..."
+                      value={formData.avatar}
+                      onChange={(e) =>
+                        setFormData({ ...formData, avatar: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+
+                {/* 2. Core Demographics Row (3 columns): Full Name *, Age, Role / Title * */}
+                <div className="persona-row-3col">
+                  <div className="persona-col-field flex-name">
+                    <label className="persona-field-label">Full Name *</label>
                     <input
                       type="text"
-                      className="form-input"
-                      placeholder="e.g. Maya Lin"
+                      className="persona-field-input"
+                      placeholder="e.g. Maya Chen"
                       required
                       value={formData.name}
                       onChange={(e) =>
@@ -939,12 +1191,30 @@ export default function PersonasApp({ t }) {
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Role / Job Title *</label>
+                  <div className="persona-col-field flex-age">
+                    <label className="persona-field-label">Age</label>
+                    <input
+                      type="number"
+                      className="persona-field-input"
+                      min="1"
+                      max="120"
+                      placeholder="28"
+                      value={formData.age}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          age: parseInt(e.target.value, 10) || "",
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="persona-col-field flex-role">
+                    <label className="persona-field-label">Role / Title *</label>
                     <input
                       type="text"
-                      className="form-input"
-                      placeholder="e.g. Senior Product Designer"
+                      className="persona-field-input"
+                      placeholder="e.g. Lead Product Designer"
                       required
                       value={formData.role}
                       onChange={(e) =>
@@ -954,61 +1224,80 @@ export default function PersonasApp({ t }) {
                   </div>
                 </div>
 
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">Category / Role Tag</label>
-                    <input
-                      type="text"
-                      className="form-input"
-                      placeholder="e.g. Core Designer, Tech Lead"
-                      value={formData.category}
+                {/* 3. Narrative Row (2 columns): Persona Background / Bio & User Quote (Motto) */}
+                <div className="persona-row-2col">
+                  <div className="persona-col-field">
+                    <label className="persona-field-label">
+                      Persona Background / Bio
+                    </label>
+                    <textarea
+                      rows={3}
+                      className="persona-field-textarea"
+                      placeholder="Brief summary of their day-to-day context..."
+                      value={formData.bio}
                       onChange={(e) =>
-                        setFormData({ ...formData, category: e.target.value })
+                        setFormData({ ...formData, bio: e.target.value })
                       }
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Age</label>
-                    <input
-                      type="number"
-                      className="form-input"
-                      min="16"
-                      max="99"
-                      value={formData.age}
+                  <div className="persona-col-field">
+                    <label className="persona-field-label">User Quote (Motto)</label>
+                    <textarea
+                      rows={3}
+                      className="persona-field-textarea quote-placeholder"
+                      placeholder='"I need to know the why behind every requirement."'
+                      value={formData.quote}
                       onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          age: parseInt(e.target.value, 10) || 30,
-                        })
+                        setFormData({ ...formData, quote: e.target.value })
                       }
                     />
                   </div>
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label">Key Quote / Core Statement</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    placeholder="e.g. If engineering does not know who they are building for, the feature is at risk."
-                    value={formData.quote}
-                    onChange={(e) =>
-                      setFormData({ ...formData, quote: e.target.value })
-                    }
-                  />
-                </div>
+                {/* 4. PAIN POINTS & FRUSTRATIONS (Red Card) */}
+                <div className="persona-card-container red-container">
+                  <div className="persona-card-header red-header">
+                    <div className="persona-card-title-left">
+                      <span className="persona-status-bullet red-bullet"></span>
+                      <span className="persona-card-title red-title">
+                        PAIN POINTS &amp; FRUSTRATIONS
+                      </span>
+                    </div>
+                    <span className="persona-card-counter red-counter">
+                      {formData.painPoints.filter((p) => p && p.trim()).length} added
+                    </span>
+                  </div>
 
-                {/* Pain points list manager */}
-                <div className="form-group">
-                  <label className="form-label">
-                    Pain Points ({formData.painPoints.length})
-                  </label>
-                  <div className="tag-input-row">
+                  {/* List of Pain Point Slots */}
+                  <div className="persona-card-slots">
+                    {formData.painPoints.map((point, idx) => (
+                      <div key={idx} className="persona-item-slot-row">
+                        <input
+                          type="text"
+                          className="persona-slot-input"
+                          placeholder={`Pain point #${idx + 1}`}
+                          value={point}
+                          onChange={(e) => handleUpdatePain(idx, e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          className="persona-slot-trash-btn red-trash"
+                          onClick={() => handleRemovePain(idx)}
+                          title="Remove pain point"
+                        >
+                          <TrashIcon width={15} height={15} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Add Pain Point Row */}
+                  <div className="persona-card-add-row">
                     <input
                       type="text"
-                      className="form-input"
-                      placeholder="Add a user pain point..."
+                      className="persona-add-input"
+                      placeholder="Add another pain point (press Enter)..."
                       value={newPainInput}
                       onChange={(e) => setNewPainInput(e.target.value)}
                       onKeyDown={(e) => {
@@ -1020,38 +1309,57 @@ export default function PersonasApp({ t }) {
                     />
                     <button
                       type="button"
-                      className="btn-secondary"
+                      className="persona-card-add-btn red-btn"
                       onClick={handleAddPain}
                     >
-                      Add
+                      + Add
                     </button>
                   </div>
-                  <div className="items-tag-list">
-                    {formData.painPoints.map((pt, idx) => (
-                      <div key={idx} className="item-tag-row pain-tag">
-                        <span>{pt}</span>
+                </div>
+
+                {/* 5. MOTIVATIONS & CORE DRIVERS (Green Card) */}
+                <div className="persona-card-container green-container">
+                  <div className="persona-card-header green-header">
+                    <div className="persona-card-title-left">
+                      <span className="persona-status-bullet green-bullet"></span>
+                      <span className="persona-card-title green-title">
+                        MOTIVATIONS &amp; CORE DRIVERS
+                      </span>
+                    </div>
+                    <span className="persona-card-counter green-counter">
+                      {formData.motivations.filter((m) => m && m.trim()).length} added
+                    </span>
+                  </div>
+
+                  {/* List of Motivation Slots */}
+                  <div className="persona-card-slots">
+                    {formData.motivations.map((mot, idx) => (
+                      <div key={idx} className="persona-item-slot-row">
+                        <input
+                          type="text"
+                          className="persona-slot-input"
+                          placeholder={`Motivation #${idx + 1}`}
+                          value={mot}
+                          onChange={(e) => handleUpdateMot(idx, e.target.value)}
+                        />
                         <button
                           type="button"
-                          className="btn-remove-tag"
-                          onClick={() => handleRemovePain(idx)}
+                          className="persona-slot-trash-btn green-trash"
+                          onClick={() => handleRemoveMot(idx)}
+                          title="Remove motivation"
                         >
-                          <XCloseIcon width={14} height={14} />
+                          <TrashIcon width={15} height={15} />
                         </button>
                       </div>
                     ))}
                   </div>
-                </div>
 
-                {/* Motivations list manager */}
-                <div className="form-group">
-                  <label className="form-label">
-                    Motivations ({formData.motivations.length})
-                  </label>
-                  <div className="tag-input-row">
+                  {/* Add Motivation Row */}
+                  <div className="persona-card-add-row">
                     <input
                       type="text"
-                      className="form-input"
-                      placeholder="Add a user motivation..."
+                      className="persona-add-input"
+                      placeholder="Add another motivation (press Enter)..."
                       value={newMotInput}
                       onChange={(e) => setNewMotInput(e.target.value)}
                       onKeyDown={(e) => {
@@ -1063,40 +1371,124 @@ export default function PersonasApp({ t }) {
                     />
                     <button
                       type="button"
-                      className="btn-secondary"
+                      className="persona-card-add-btn green-btn"
                       onClick={handleAddMot}
                     >
-                      Add
+                      + Add
                     </button>
                   </div>
-                  <div className="items-tag-list">
-                    {formData.motivations.map((mot, idx) => (
-                      <div key={idx} className="item-tag-row mot-tag">
-                        <span>{mot}</span>
+                </div>
+
+                {/* 6. PRIMARY GOALS & OBJECTIVES (Slate Card) */}
+                <div className="persona-card-container slate-container">
+                  <div className="persona-card-header slate-header">
+                    <div className="persona-card-title-left">
+                      <span className="persona-card-title slate-title">
+                        PRIMARY GOALS &amp; OBJECTIVES
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* List of Goal Slots */}
+                  <div className="persona-card-slots">
+                    {formData.goals.map((goal, idx) => (
+                      <div key={idx} className="persona-item-slot-row">
+                        <input
+                          type="text"
+                          className="persona-slot-input"
+                          placeholder={`Goal #${idx + 1}`}
+                          value={goal}
+                          onChange={(e) => handleUpdateGoal(idx, e.target.value)}
+                        />
                         <button
                           type="button"
-                          className="btn-remove-tag"
-                          onClick={() => handleRemoveMot(idx)}
+                          className="persona-slot-trash-btn slate-trash"
+                          onClick={() => handleRemoveGoal(idx)}
+                          title="Remove goal"
                         >
-                          <XCloseIcon width={14} height={14} />
+                          <TrashIcon width={15} height={15} />
                         </button>
                       </div>
                     ))}
                   </div>
+
+                  {/* Add Goal Row */}
+                  <div className="persona-card-add-row">
+                    <input
+                      type="text"
+                      className="persona-add-input"
+                      placeholder="Add another objective..."
+                      value={newGoalInput}
+                      onChange={(e) => setNewGoalInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddGoal();
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="persona-card-add-btn slate-btn"
+                      onClick={handleAddGoal}
+                    >
+                      + Add
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => setIsFormOpen(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn-primary">
-                  {editingPersona ? "Save Changes" : "Create Persona"}
-                </button>
+              {/* Modal Footer */}
+              <div className="persona-create-footer">
+                <div className="persona-footer-survey-group">
+                  <label
+                    className="persona-survey-attach-label"
+                    title="Attach survey responses (.xls, .xlsx, .csv)"
+                  >
+                    <input
+                      type="file"
+                      accept=".xls,.xlsx,.csv"
+                      style={{ display: "none" }}
+                      onChange={handleSurveyFileChange}
+                    />
+                    <FileSpreadsheetIcon
+                      width={18}
+                      height={18}
+                      className="persona-survey-icon"
+                    />
+                    <span className="persona-survey-text">
+                      {formData.attachedSurvey
+                        ? formData.attachedSurvey.name
+                        : "Attach Surveys (XLS / CSV)"}
+                    </span>
+                    <span className="persona-survey-status-dot"></span>
+                  </label>
+                  {formData.attachedSurvey && (
+                    <button
+                      type="button"
+                      className="persona-survey-clear-btn"
+                      onClick={() =>
+                        setFormData((prev) => ({ ...prev, attachedSurvey: null }))
+                      }
+                      title="Detach survey file"
+                    >
+                      <XCloseIcon width={12} height={12} />
+                    </button>
+                  )}
+                </div>
+
+                <div className="persona-footer-actions">
+                  <button
+                    type="button"
+                    className="persona-btn-cancel"
+                    onClick={() => setIsFormOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="persona-btn-create">
+                    {editingPersona ? "Save Changes" : "Create Persona"}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
