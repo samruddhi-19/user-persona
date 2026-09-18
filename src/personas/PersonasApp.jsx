@@ -183,6 +183,7 @@ export default function PersonasApp({ t }) {
   const [editingPersona, setEditingPersona] = useState(null);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [aiSelectedTemplate, setAiSelectedTemplate] = useState(0);
+  const [blueprintTemplateIdx, setBlueprintTemplateIdx] = useState(0);
   const [aiPrompt, setAiPrompt] = useState("");
   const [isAiGenerating, setIsAiGenerating] = useState(false);
 
@@ -199,6 +200,8 @@ export default function PersonasApp({ t }) {
   });
   const [newPainInput, setNewPainInput] = useState("");
   const [newMotInput, setNewMotInput] = useState("");
+
+  const currentBlueprint = AI_TEMPLATES[blueprintTemplateIdx] || AI_TEMPLATES[0];
 
   // Load personas from Trello board shared storage
   useEffect(() => {
@@ -596,17 +599,21 @@ export default function PersonasApp({ t }) {
                 </div>
 
                 <div className="split-quick-archetypes">
-                  <span className="quick-archetypes-label">Quick 1-click archetypes:</span>
+                  <div className="quick-archetypes-header">
+                    <span className="quick-archetypes-label">Quick 1-click archetypes:</span>
+                    <span className="quick-archetypes-sub">Click to preview live</span>
+                  </div>
                   <div className="quick-chips-row">
                     {AI_TEMPLATES.map((tmpl, idx) => (
                       <button
                         key={idx}
                         type="button"
-                        className="quick-chip-btn"
+                        className={`quick-chip-btn ${blueprintTemplateIdx === idx ? "active" : ""}`}
                         onClick={() => {
+                          setBlueprintTemplateIdx(idx);
                           setAiSelectedTemplate(idx);
-                          setIsAiModalOpen(true);
                         }}
+                        title={`Preview ${tmpl.name} (${tmpl.role})`}
                       >
                         {tmpl.role}
                       </button>
@@ -621,40 +628,48 @@ export default function PersonasApp({ t }) {
                   <div className="blueprint-header-tag">
                     <span className="blueprint-live-indicator"></span>
                     <span>Interactive Persona Blueprint</span>
+                    <span className="blueprint-active-archetype-tag">{currentBlueprint.role}</span>
                   </div>
 
                   <div className="blueprint-card">
                     <div className="blueprint-card-top">
                       <div className="blueprint-avatar-wrapper">
-                        <img
-                          src="./avatars/maya.jpg"
-                          alt="Maya Lin"
-                          className="blueprint-avatar-img"
-                          onError={(e) => {
-                            e.currentTarget.style.display = "none";
-                            e.currentTarget.nextSibling.style.display = "flex";
-                          }}
-                        />
-                        <div className="blueprint-avatar-fallback" style={{ display: "none" }}>
-                          M
+                        {currentBlueprint.avatar ? (
+                          <img
+                            key={currentBlueprint.avatar}
+                            src={currentBlueprint.avatar}
+                            alt={currentBlueprint.name}
+                            className="blueprint-avatar-img"
+                            onError={(e) => {
+                              e.currentTarget.style.display = "none";
+                              const fallback = e.currentTarget.parentElement.querySelector(".blueprint-avatar-fallback");
+                              if (fallback) fallback.style.display = "flex";
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          className="blueprint-avatar-fallback"
+                          style={{ display: currentBlueprint.avatar ? "none" : "flex" }}
+                        >
+                          {currentBlueprint.name.charAt(0)}
                         </div>
                       </div>
 
                       <div className="blueprint-meta">
                         <div className="blueprint-name-row">
-                          <h3 className="blueprint-name">Maya Lin</h3>
+                          <h3 className="blueprint-name">{currentBlueprint.name}</h3>
                           <span className="blueprint-sample-badge">Sample Card</span>
                         </div>
-                        <p className="blueprint-role">Senior Product Designer</p>
+                        <p className="blueprint-role">{currentBlueprint.role}</p>
                         <div className="blueprint-tags-row">
-                          <span className="blueprint-badge-age">Age 31</span>
-                          <span className="blueprint-badge-cat">Core Designer</span>
+                          <span className="blueprint-badge-age">Age {currentBlueprint.age}</span>
+                          <span className="blueprint-badge-cat">{currentBlueprint.category}</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="blueprint-quote-box">
-                      "If engineering doesn't know who they are building for, the feature is already at risk."
+                      {currentBlueprint.quote}
                     </div>
 
                     <div className="blueprint-section">
@@ -663,7 +678,7 @@ export default function PersonasApp({ t }) {
                         <span className="blueprint-section-title pain-title">PAIN POINTS</span>
                       </div>
                       <div className="blueprint-pill pain-pill">
-                        Disconnected user feedback scattered across Jira, Slack, & emails
+                        {currentBlueprint.painPoints[0]}
                       </div>
                     </div>
 
@@ -673,19 +688,20 @@ export default function PersonasApp({ t }) {
                         <span className="blueprint-section-title mot-title">MOTIVATIONS</span>
                       </div>
                       <div className="blueprint-pill mot-pill">
-                        Advocating for the end-user throughout every engineering ticket
+                        {currentBlueprint.motivations[0]}
                       </div>
                     </div>
 
                     <div className="blueprint-footer">
                       <div className="blueprint-attach-info">
-                        <CardsStackIcon width={14} height={14} />
+                        <CardsStackIcon width={15} height={15} />
                         <span>Attaches directly to Trello Cards</span>
                       </div>
                       <button
                         type="button"
                         className="blueprint-adopt-btn"
                         onClick={handleLoadDemoPersonas}
+                        title="Load sample personas into your board"
                       >
                         Explore Demo Personas →
                       </button>
