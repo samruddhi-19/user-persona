@@ -68,9 +68,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 14px;
   max-width: 1400px;
   margin: 0 auto;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--ads-surface-card);
+  border: 1px solid var(--ads-border);
+  color: var(--ads-text-subtle);
+  padding: 9px 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.btn-back:hover {
+  background-color: var(--ads-surface-hover);
+  color: var(--ads-text-primary);
+  border-color: var(--trello-blue);
+  transform: translateX(-2px);
 }
 
 .search-input-wrapper {

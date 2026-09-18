@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import {
   SearchIcon,
+  ArrowLeftIcon,
   PlusIcon,
   SparklesIcon,
   EditPencilIcon,
@@ -259,6 +260,16 @@ export default function PersonasApp({ t }) {
     setExpandedMots((prev) => ({ ...prev, [id]: !prev[id] }));
   }
 
+  function handleBack() {
+    if (t && typeof t.closeModal === "function") {
+      t.closeModal();
+    } else if (t && typeof t.closePopup === "function") {
+      t.closePopup();
+    } else if (typeof window !== "undefined" && window.history) {
+      window.history.back();
+    }
+  }
+
   // Open Create Form
   function openCreateModal() {
     setEditingPersona(null);
@@ -458,6 +469,16 @@ export default function PersonasApp({ t }) {
       {/* Top Header & Search Toolbar */}
       <header className="personas-header">
         <div className="personas-toolbar">
+          <button
+            type="button"
+            className="btn-back"
+            onClick={handleBack}
+            title="Back to Trello Board"
+          >
+            <ArrowLeftIcon width={16} height={16} />
+            <span>Back</span>
+          </button>
+
           <div className="search-input-wrapper">
             <span className="search-icon">
               <SearchIcon width={16} height={16} />
