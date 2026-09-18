@@ -191,21 +191,37 @@
         border: 1px solid var(--border);
         border-radius: 0 0 12px 12px;
         overflow: hidden;
-        height: 480px;
+        height: 520px;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: height 0.2s ease;
+      }
+
+      .preview-iframe-wrapper.wide-wrapper {
+        height: 720px;
+        align-items: stretch;
+        padding: 0;
       }
 
       iframe {
         width: 100%;
         max-width: 440px;
-        height: 380px;
+        height: 420px;
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 10px;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
         background: #1d2125;
+        transition: all 0.2s ease;
+      }
+
+      iframe.wide-view {
+        max-width: 100%;
+        height: 100%;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
       }
 
       .step-item {
@@ -259,9 +275,13 @@
         <!-- Sidebar Navigation & Config -->
         <div>
           <div class="card">
-            <h2>Popup Previews</h2>
+            <h2>Power-Up Views & Previews</h2>
             <div class="nav-pills">
-              <button class="nav-pill active" onclick="switchPreview('./auth.html', 'Authorization Popup (auth.html)', this)">
+              <button class="nav-pill active" onclick="switchPreview('./personas.html', 'User Personas Board (personas.html)', this)">
+                <span>User Personas Board</span>
+                <code>personas.html</code>
+              </button>
+              <button class="nav-pill" onclick="switchPreview('./auth.html', 'Authorization Popup (auth.html)', this)">
                 <span>Authorization Popup</span>
                 <code>auth.html</code>
               </button>
@@ -305,13 +325,13 @@
         <div class="preview-container">
           <div class="card" style="margin-bottom: 0; padding: 0; overflow: hidden;">
             <div class="preview-header">
-              <span class="preview-title" id="preview-heading">Authorization Popup (auth.html)</span>
-              <a id="direct-link" href="./auth.html" target="_blank" style="color: var(--primary); font-size: 12px; text-decoration: none;">
+              <span class="preview-title" id="preview-heading">User Personas Board (personas.html)</span>
+              <a id="direct-link" href="./personas.html" target="_blank" style="color: var(--primary); font-size: 12px; text-decoration: none;">
                 Open in new tab ↗
               </a>
             </div>
-            <div class="preview-iframe-wrapper">
-              <iframe id="preview-frame" src="./auth.html"></iframe>
+            <div class="preview-iframe-wrapper wide-wrapper">
+              <iframe id="preview-frame" class="wide-view" src="./personas.html"></iframe>
             </div>
           </div>
         </div>
@@ -320,9 +340,20 @@
 
     <script>
       function switchPreview(url, title, el) {
-        document.getElementById("preview-frame").src = url;
+        const frame = document.getElementById("preview-frame");
+        const wrapper = document.querySelector(".preview-iframe-wrapper");
+
+        frame.src = url;
         document.getElementById("preview-heading").textContent = title;
         document.getElementById("direct-link").href = url;
+
+        if (url.includes("personas.html")) {
+          wrapper.classList.add("wide-wrapper");
+          frame.classList.add("wide-view");
+        } else {
+          wrapper.classList.remove("wide-wrapper");
+          frame.classList.remove("wide-view");
+        }
 
         document.querySelectorAll(".nav-pill").forEach(function(pill) {
           pill.classList.remove("active");

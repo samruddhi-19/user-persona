@@ -94,3 +94,203 @@ export function ExternalLinkIcon({ width = 14, height = 14, ...props }) {
     </svg>
   );
 }
+
+export function SearchIcon({ width = 16, height = 16, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <circle cx="11" cy="11" r="8" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  );
+}
+
+export function PlusIcon({ width = 16, height = 16, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  );
+}
+
+export function SparklesIcon({ width = 16, height = 16, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+      <path d="M5 3v4" />
+      <path d="M3 5h4" />
+      <path d="M19 17v4" />
+      <path d="M17 19h4" />
+    </svg>
+  );
+}
+
+export function EditPencilIcon({ width = 14, height = 14, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+    </svg>
+  );
+}
+
+export function TrashIcon({ width = 14, height = 14, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <line x1="10" y1="11" x2="10" y2="17" />
+      <line x1="14" y1="11" x2="14" y2="17" />
+    </svg>
+  );
+}
+
+export function CardsStackIcon({ width = 16, height = 16, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+      <path d="M2 17l10 5 10-5" />
+      <path d="M2 12l10 5 10-5" />
+    </svg>
+  );
+}
+
+export function XCloseIcon({ width = 16, height = 16, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+export function EmptyPersonaIllustration({ width = 120, height = 120, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 120 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <rect x="20" y="24" width="80" height="72" rx="12" fill="#22272B" stroke="#333C43" strokeWidth="2" />
+      <rect x="30" y="14" width="60" height="12" rx="6" fill="rgba(87, 157, 255, 0.15)" stroke="#579DFF" strokeWidth="1.5" strokeDasharray="3 3" />
+      <circle cx="60" cy="52" r="16" fill="rgba(87, 157, 255, 0.18)" stroke="#579DFF" strokeWidth="2" />
+      <circle cx="60" cy="48" r="6" fill="#579DFF" />
+      <path d="M50 63c0-5.5 4.5-8 10-8s10 2.5 10 8" stroke="#579DFF" strokeWidth="2" strokeLinecap="round" />
+      <rect x="38" y="74" width="44" height="6" rx="3" fill="#282E33" />
+      <rect x="46" y="83" width="28" height="5" rx="2.5" fill="#333C43" />
+      <circle cx="95" cy="35" r="4" fill="#579DFF" />
+      <circle cx="22" cy="80" r="3" fill="#4BCE97" />
+      <circle cx="96" cy="85" r="5" fill="#F87168" />
+    </svg>
+  );
+}
+
+export function MailIcon({ width = 14, height = 14, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+      <polyline points="22,6 12,13 2,6" />
+    </svg>
+  );
+}
+
+export function PinIcon({ width = 14, height = 14, ...props }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <line x1="12" y1="17" x2="12" y2="22" />
+      <path d="M5 17h14v-2l-2-2V5h1V3H6v2h1v8l-2 2v2z" />
+    </svg>
+  );
+}

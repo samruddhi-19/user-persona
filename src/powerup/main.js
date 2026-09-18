@@ -49,10 +49,10 @@ TrelloPowerUp.initialize({
               height: 320,
             });
           }
-          return t.popup({
-            title: "User Personaa Settings",
-            url: "./settings.html",
-            height: 280,
+          return t.modal({
+            title: "User Personas",
+            url: "./personas.html",
+            fullscreen: true,
           });
         },
       },
@@ -74,10 +74,10 @@ TrelloPowerUp.initialize({
               height: 320,
             });
           }
-          return t.popup({
-            title: "User Personaa Settings",
-            url: "./settings.html",
-            height: 280,
+          return t.modal({
+            title: "User Personas",
+            url: "./personas.html",
+            fullscreen: true,
           });
         },
       },

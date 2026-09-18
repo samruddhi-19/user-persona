@@ -15,6 +15,7 @@ export default defineConfig({
         powerup: resolve(__dirname, "powerup.html"),
         auth: resolve(__dirname, "auth.html"),
         settings: resolve(__dirname, "settings.html"),
+        personas: resolve(__dirname, "personas.html"),
       },
     },
   },
