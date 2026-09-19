@@ -18,52 +18,26 @@ import {
 } from "../lib/icons.jsx";
 import "./personas.css";
 
-// 20 High-Resolution Professional Real Human Faces (Default)
+// Curated High-Resolution Professional Real Human Faces (Matching Design Spec)
 export const REAL_FACES_PACK = [
   { id: "real-1", name: "Maya (UX Designer)", url: "./avatars/maya.jpg" },
-  { id: "real-2", name: "Marcus (Tech Lead)", url: "./avatars/marcus.jpg" },
-  { id: "real-3", name: "Chloe (Growth & CS)", url: "./avatars/chloe.jpg" },
-  { id: "real-4", name: "Alex (Product Manager)", url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-5", name: "Sarah (Data Analyst)", url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-6", name: "Elena (Operations)", url: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-7", name: "David (Security)", url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-8", name: "Jordan (Customer Success)", url: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-9", name: "Emily (Frontend Dev)", url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-10", name: "Michael (Engineering Lead)", url: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-11", name: "Priya (UX Researcher)", url: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-12", name: "Daniel (QA Specialist)", url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-13", name: "Sophia (Brand Designer)", url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-14", name: "Carlos (Scrum Master)", url: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-15", name: "Olivia (Product Strategist)", url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-16", name: "Robert (Enterprise IT)", url: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-2", name: "Elena (Operations)", url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-3", name: "David (Security)", url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-4", name: "Emily (Frontend Dev)", url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-5", name: "Alex (Product Manager)", url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-6", name: "Sarah (Data Analyst)", url: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-7", name: "Sophia (Brand Designer)", url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-8", name: "Robert (Enterprise IT)", url: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-9", name: "Michael (Engineering Lead)", url: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-10", name: "Marcus (Tech Lead)", url: "./avatars/marcus.jpg" },
+  { id: "real-11", name: "Chloe (Growth & CS)", url: "./avatars/chloe.jpg" },
+  { id: "real-12", name: "Jordan (Customer Success)", url: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-13", name: "Carlos (Scrum Master)", url: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-14", name: "Olivia (Product Strategist)", url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-15", name: "Daniel (QA Specialist)", url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&auto=format&fit=crop&q=80" },
+  { id: "real-16", name: "Nathan (Cloud Architect)", url: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=160&auto=format&fit=crop&q=80" },
   { id: "real-17", name: "Grace (Customer Support)", url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-18", name: "Nathan (Cloud Architect)", url: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-19", name: "Hannah (Operations Manager)", url: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-20", name: "PersonaBot (AI Assistant)", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PersonaBot&backgroundColor=3182ce&radius=12" },
-];
-
-// 20 Clean Competitor-Style Flat Vector Avatars (Calm, Professional Neutral Faces Only)
-export const FLAT_AVATARS_PACK = [
-  { id: "flat-1", name: "Designer (Cyan)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Avery&eyes=default&mouth=default&backgroundColor=2cb598&radius=12" },
-  { id: "flat-2", name: "Product (Salmon)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Amaya&eyes=default&mouth=default&backgroundColor=e53e3e&radius=12" },
-  { id: "flat-3", name: "Developer (Maroon)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily&eyes=default&mouth=default&backgroundColor=742a2a&radius=12" },
-  { id: "flat-4", name: "Tech Lead (Purple)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus&eyes=default&mouth=default&backgroundColor=805ad5&radius=12" },
-  { id: "flat-5", name: "Marketer (Teal)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chloe&eyes=default&mouth=default&backgroundColor=319795&radius=12" },
-  { id: "flat-6", name: "Architect (Olive)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&eyes=default&mouth=default&backgroundColor=38a169&radius=12" },
-  { id: "flat-7", name: "Executive (Magenta)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&eyes=default&mouth=default&backgroundColor=b83280&radius=12" },
-  { id: "flat-8", name: "Engineer (Cyan)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Leo&eyes=default&mouth=default&backgroundColor=319795&radius=12" },
-  { id: "flat-9", name: "UX Researcher (Dark Teal)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zoe&eyes=default&mouth=default&backgroundColor=234e52&radius=12" },
-  { id: "flat-10", name: "Data Scientist (Amber)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Oliver&eyes=default&mouth=default&backgroundColor=d69e2e&radius=12" },
-  { id: "flat-11", name: "Operations (Deep Cyan)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Liam&eyes=default&mouth=default&backgroundColor=285e61&radius=12" },
-  { id: "flat-12", name: "Consultant (Navy)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Aria&eyes=default&mouth=default&backgroundColor=1a365d&radius=12" },
-  { id: "flat-13", name: "Support Specialist (Coral)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ethan&eyes=default&mouth=default&backgroundColor=c53030&radius=12" },
-  { id: "flat-14", name: "Security Analyst (Mint)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena&eyes=default&mouth=default&backgroundColor=38b2ac&radius=12" },
-  { id: "flat-15", name: "DevOps Lead (Forest Green)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=James&eyes=default&mouth=default&backgroundColor=276749&radius=12" },
-  { id: "flat-16", name: "Senior Advisor (Light Teal)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=David&eyes=default&mouth=default&backgroundColor=4fd1c5&radius=12" },
-  { id: "flat-17", name: "Director (Peach)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie&eyes=default&mouth=default&backgroundColor=ed8936&radius=12" },
-  { id: "flat-18", name: "VP Product (Tan)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Noah&eyes=default&mouth=default&backgroundColor=c05621&radius=12" },
-  { id: "flat-19", name: "Founder (Brown)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas&eyes=default&mouth=default&backgroundColor=744210&radius=12" },
-  { id: "flat-20", name: "PersonaBot (Blue Robot)", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PersonaBot&backgroundColor=3182ce&radius=12" },
+  { id: "real-18", name: "Hannah (Operations Manager)", url: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=160&auto=format&fit=crop&q=80" },
 ];
 
 export const PRESET_AVATARS = REAL_FACES_PACK;
@@ -378,14 +352,10 @@ export default function PersonasApp({ t }) {
     }
   }
 
-  // Randomize avatar generator
+  // Randomize avatar generator from curated real portraits
   function handleRandomizeAvatar() {
-    const randomSeed = "persona_" + Math.random().toString(36).substring(2, 9);
-    const bgColors = ["b6e3f4", "c0aede", "d1d4f9", "ffd5dc", "ffdfbf", "e0e7ff", "ecfdf5", "ede9fe"];
-    const randomBg = bgColors[Math.floor(Math.random() * bgColors.length)];
-    const style = avatarStyleTab === "notion" ? "notionists" : "lorelei";
-    const newUrl = `https://api.dicebear.com/7.x/${style}/svg?seed=${randomSeed}&backgroundColor=${randomBg}`;
-    setFormData((prev) => ({ ...prev, avatar: newUrl }));
+    const randomAvatar = PRESET_AVATARS[Math.floor(Math.random() * PRESET_AVATARS.length)];
+    setFormData((prev) => ({ ...prev, avatar: randomAvatar.url }));
   }
 
   // Open Create Form
@@ -1202,82 +1172,50 @@ export default function PersonasApp({ t }) {
             {/* Scrollable Form Body */}
             <form onSubmit={handleSavePersona} className="persona-create-form">
               <div className="persona-create-body">
-                {/* 1. CHOOSE AVATAR Section (Real Professional Faces & Competitor Flat Avatars) */}
-                <div className="persona-section-group">
-                  <div className="persona-avatar-header-row">
-                    <label className="persona-section-heading" style={{ marginBottom: 0 }}>
-                      Choose or upload an avatar...
-                    </label>
-                    <div className="persona-avatar-style-tabs">
-                      <button
-                        type="button"
-                        className={`persona-avatar-tab-btn ${avatarStyleTab === "real" ? "active" : ""}`}
-                        onClick={() => {
-                          setAvatarStyleTab("real");
-                          if (!formData.avatar || formData.avatar.includes("dicebear")) {
-                            setFormData((prev) => ({ ...prev, avatar: REAL_FACES_PACK[0].url }));
-                          }
-                        }}
-                        title="High-resolution professional real human photos"
-                      >
-                        📸 Real Professional Faces
-                      </button>
-                      <button
-                        type="button"
-                        className={`persona-avatar-tab-btn ${avatarStyleTab === "flat" ? "active" : ""}`}
-                        onClick={() => {
-                          setAvatarStyleTab("flat");
-                          if (!formData.avatar || formData.avatar.includes("avatars/")) {
-                            setFormData((prev) => ({ ...prev, avatar: FLAT_AVATARS_PACK[0].url }));
-                          }
-                        }}
-                        title="Clean competitor flat vector avatars"
-                      >
-                        🎨 Competitor Flat Style
-                      </button>
-                    </div>
-                  </div>
-
+                {/* 1. CHOOSE AVATAR Section (Single-row Circular Picker & Real Faces) */}
+                <div className="persona-section-group" style={{ marginBottom: "18px" }}>
+                  <label className="persona-section-heading">CHOOSE AVATAR</label>
                   <div className="persona-avatar-picker-row">
-                    {/* Main Preview (Rounded Square) */}
+                    {/* Left: Large Circular Avatar Preview */}
                     <div className="persona-avatar-main-preview" title="Selected Persona Avatar">
                       <img
-                        src={formData.avatar || REAL_FACES_PACK[0].url}
+                        src={formData.avatar || PRESET_AVATARS[0].url}
                         alt="Selected Avatar"
                         className="persona-avatar-preview-img"
                         onError={(e) => {
-                          e.currentTarget.src = REAL_FACES_PACK[0].url;
+                          e.currentTarget.src = PRESET_AVATARS[0].url;
                         }}
                       />
                     </div>
 
-                    {/* 5x4 Grid of 20 Avatars */}
-                    <div className="persona-avatar-grid-wrapper">
-                      <div className="persona-avatar-grid">
-                        {(avatarStyleTab === "flat" ? FLAT_AVATARS_PACK : REAL_FACES_PACK).map((av) => (
+                    {/* Right Column: Horizontal Row of Avatars + Custom URL Input */}
+                    <div className="persona-avatar-right-col">
+                      {/* Row 1: Single Horizontal Row of Circular Presets */}
+                      <div className="persona-avatar-preset-list">
+                        {PRESET_AVATARS.map((av) => (
                           <button
                             key={av.id}
                             type="button"
-                            className={`persona-avatar-grid-btn ${
+                            className={`persona-avatar-preset-btn ${
                               formData.avatar === av.url ? "selected" : ""
                             }`}
                             onClick={() => setFormData({ ...formData, avatar: av.url })}
-                            title={av.name}
+                            title={`Select ${av.name}`}
                           >
                             <img
                               src={av.url}
                               alt={av.name}
-                              className="persona-avatar-grid-img"
+                              className="persona-avatar-preset-img"
                               onError={(e) => {
-                                e.currentTarget.src = REAL_FACES_PACK[0].url;
+                                e.currentTarget.src = PRESET_AVATARS[0].url;
                               }}
                             />
                           </button>
                         ))}
                       </div>
 
-                      {/* Upload Own Image Button & UI Faces Pro Tip */}
-                      <div className="persona-avatar-actions-bar">
+                      {/* Row 2: Custom Image URL Box */}
+                      <div className="persona-custom-avatar-box">
                         <input
                           type="file"
                           id="persona-avatar-file-upload"
@@ -1287,54 +1225,26 @@ export default function PersonasApp({ t }) {
                         />
                         <label
                           htmlFor="persona-avatar-file-upload"
-                          className="persona-avatar-upload-label"
+                          className="persona-custom-avatar-icon"
+                          title="Click to upload an image from your computer"
                         >
-                          <ImageIcon width={14} height={14} />
-                          Upload your own image
+                          <ImageIcon width={16} height={16} />
                         </label>
-                        <span className="persona-avatar-tip-note">
-                          Pro Tip! You can search for persona avatars on{" "}
-                          <a
-                            href="https://uifaces.co"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            uifaces.co
-                          </a>
-                        </span>
+                        <input
+                          type="url"
+                          className="persona-custom-avatar-input"
+                          placeholder="Or paste custom image URL..."
+                          value={
+                            PRESET_AVATARS.some((av) => av.url === formData.avatar)
+                              ? ""
+                              : (formData.avatar || "")
+                          }
+                          onChange={(e) =>
+                            setFormData({ ...formData, avatar: e.target.value })
+                          }
+                        />
                       </div>
                     </div>
-                  </div>
-
-                  {/* Custom image URL paste input */}
-                  <div className="persona-custom-avatar-box">
-                    <span className="persona-custom-avatar-icon">
-                      <ImageIcon width={16} height={16} />
-                    </span>
-                    <input
-                      type="url"
-                      className="persona-custom-avatar-input"
-                      placeholder={
-                        REAL_FACES_PACK.some((av) => av.url === formData.avatar)
-                          ? `Selected: ${
-                              REAL_FACES_PACK.find((av) => av.url === formData.avatar)?.name
-                            } (or paste custom URL)`
-                          : FLAT_AVATARS_PACK.some((av) => av.url === formData.avatar)
-                          ? `Selected: ${
-                              FLAT_AVATARS_PACK.find((av) => av.url === formData.avatar)?.name
-                            } (or paste custom URL)`
-                          : "Or paste custom image URL..."
-                      }
-                      value={
-                        REAL_FACES_PACK.some((av) => av.url === formData.avatar) ||
-                        FLAT_AVATARS_PACK.some((av) => av.url === formData.avatar)
-                          ? ""
-                          : formData.avatar
-                      }
-                      onChange={(e) =>
-                        setFormData({ ...formData, avatar: e.target.value })
-                      }
-                    />
                   </div>
                 </div>
 
