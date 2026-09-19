@@ -415,22 +415,42 @@ export default function PersonasApp({ t }) {
 
   // Save Persona (Create or Update)
   async function handleSavePersona(e) {
-    e.preventDefault();
-    if (!formData.name.trim()) {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!formData.name || !formData.name.trim()) {
       showToast("Please enter a Full Name for the persona.");
+      const nameEl = document.querySelector(".persona-field-input");
+      if (nameEl) nameEl.focus();
       return;
     }
 
-    // Clean up empty slots
-    const cleanPains = formData.painPoints.filter((p) => p && p.trim());
-    const cleanMots = formData.motivations.filter((m) => m && m.trim());
-    const cleanGoals = formData.goals.filter((g) => g && g.trim());
+    // Include any pending text from the add inputs so nothing is lost if user forgot to click + Add
+    let currentPains = [...formData.painPoints];
+    if (newPainInput && newPainInput.trim()) {
+      currentPains.push(newPainInput.trim());
+      setNewPainInput("");
+    }
+    let currentMots = [...formData.motivations];
+    if (newMotInput && newMotInput.trim()) {
+      currentMots.push(newMotInput.trim());
+      setNewMotInput("");
+    }
+    let currentGoals = [...formData.goals];
+    if (newGoalInput && newGoalInput.trim()) {
+      currentGoals.push(newGoalInput.trim());
+      setNewGoalInput("");
+    }
 
-    const quoteFormatted = formData.quote.trim()
-      ? formData.quote.trim().startsWith('"')
-        ? formData.quote.trim()
-        : `"${formData.quote.trim()}"`
-      : "";
+    // Clean up empty slots
+    const cleanPains = currentPains.filter((p) => p && p.trim());
+    const cleanMots = currentMots.filter((m) => m && m.trim());
+    const cleanGoals = currentGoals.filter((g) => g && g.trim());
+
+    const quoteFormatted =
+      formData.quote && formData.quote.trim()
+        ? formData.quote.trim().startsWith('"')
+          ? formData.quote.trim()
+          : `"${formData.quote.trim()}"`
+        : "";
 
     if (editingPersona) {
       const updated = personas.map((p) =>
@@ -438,6 +458,8 @@ export default function PersonasApp({ t }) {
           ? {
               ...p,
               ...formData,
+              name: formData.name.trim(),
+              role: (formData.role && formData.role.trim()) || p.role || "Lead Product Designer",
               age: parseInt(formData.age, 10) || 28,
               quote: quoteFormatted,
               painPoints: cleanPains,
@@ -452,11 +474,11 @@ export default function PersonasApp({ t }) {
       const newPersona = {
         id: `persona-${Date.now()}`,
         name: formData.name.trim(),
-        role: formData.role.trim() || "Lead Product Designer",
+        role: (formData.role && formData.role.trim()) || "Lead Product Designer",
         age: parseInt(formData.age, 10) || 28,
         category: formData.category || "Target User",
         avatar: formData.avatar || PRESET_AVATARS[0].url,
-        bio: formData.bio.trim(),
+        bio: (formData.bio && formData.bio.trim()) || "",
         quote:
           quoteFormatted || '"I need to know the why behind every requirement."',
         painPoints:
@@ -471,7 +493,7 @@ export default function PersonasApp({ t }) {
           cleanGoals.length > 0
             ? cleanGoals
             : ["Streamline cross-team agile alignment"],
-        attachedSurvey: formData.attachedSurvey,
+        attachedSurvey: formData.attachedSurvey || null,
         attachedCardsCount: 0,
         attachedMembers: [],
       };
@@ -522,12 +544,24 @@ export default function PersonasApp({ t }) {
 
   function handleAddPain() {
     const val = newPainInput.trim();
-    if (!val) return;
-    setFormData((prev) => ({
-      ...prev,
-      painPoints: [...prev.painPoints, val],
-    }));
-    setNewPainInput("");
+    if (val) {
+      setFormData((prev) => {
+        const firstEmptyIdx = prev.painPoints.findIndex((p) => !p || !p.trim());
+        if (firstEmptyIdx !== -1) {
+          const updated = [...prev.painPoints];
+          updated[firstEmptyIdx] = val;
+          return { ...prev, painPoints: updated };
+        }
+        return { ...prev, painPoints: [...prev.painPoints, val] };
+      });
+      setNewPainInput("");
+    } else {
+      // If clicked without typing, add a new empty slot row for the user!
+      setFormData((prev) => ({
+        ...prev,
+        painPoints: [...prev.painPoints, ""],
+      }));
+    }
   }
 
   // Motivations slot handlers
@@ -548,12 +582,24 @@ export default function PersonasApp({ t }) {
 
   function handleAddMot() {
     const val = newMotInput.trim();
-    if (!val) return;
-    setFormData((prev) => ({
-      ...prev,
-      motivations: [...prev.motivations, val],
-    }));
-    setNewMotInput("");
+    if (val) {
+      setFormData((prev) => {
+        const firstEmptyIdx = prev.motivations.findIndex((m) => !m || !m.trim());
+        if (firstEmptyIdx !== -1) {
+          const updated = [...prev.motivations];
+          updated[firstEmptyIdx] = val;
+          return { ...prev, motivations: updated };
+        }
+        return { ...prev, motivations: [...prev.motivations, val] };
+      });
+      setNewMotInput("");
+    } else {
+      // If clicked without typing, add a new empty slot row for the user!
+      setFormData((prev) => ({
+        ...prev,
+        motivations: [...prev.motivations, ""],
+      }));
+    }
   }
 
   // Primary Goals slot handlers
@@ -574,12 +620,24 @@ export default function PersonasApp({ t }) {
 
   function handleAddGoal() {
     const val = newGoalInput.trim();
-    if (!val) return;
-    setFormData((prev) => ({
-      ...prev,
-      goals: [...prev.goals, val],
-    }));
-    setNewGoalInput("");
+    if (val) {
+      setFormData((prev) => {
+        const firstEmptyIdx = prev.goals.findIndex((g) => !g || !g.trim());
+        if (firstEmptyIdx !== -1) {
+          const updated = [...prev.goals];
+          updated[firstEmptyIdx] = val;
+          return { ...prev, goals: updated };
+        }
+        return { ...prev, goals: [...prev.goals, val] };
+      });
+      setNewGoalInput("");
+    } else {
+      // If clicked without typing, add a new empty slot row for the user!
+      setFormData((prev) => ({
+        ...prev,
+        goals: [...prev.goals, ""],
+      }));
+    }
   }
 
   // Survey file attachment handler
@@ -1172,7 +1230,7 @@ export default function PersonasApp({ t }) {
             </div>
 
             {/* Scrollable Form Body */}
-            <form onSubmit={handleSavePersona} className="persona-create-form">
+            <form onSubmit={handleSavePersona} className="persona-create-form" noValidate>
               <div className="persona-create-body">
                 {/* 1. CHOOSE AVATAR Section (Single-row Circular Picker & Real Faces) */}
                 <div className="persona-section-group" style={{ marginBottom: "18px" }}>
@@ -1258,7 +1316,6 @@ export default function PersonasApp({ t }) {
                       type="text"
                       className="persona-field-input"
                       placeholder="e.g. Maya Chen"
-                      required
                       value={formData.name}
                       onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
@@ -1290,7 +1347,6 @@ export default function PersonasApp({ t }) {
                       type="text"
                       className="persona-field-input"
                       placeholder="e.g. Lead Product Designer"
-                      required
                       value={formData.role}
                       onChange={(e) =>
                         setFormData({ ...formData, role: e.target.value })
@@ -1560,7 +1616,11 @@ export default function PersonasApp({ t }) {
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="persona-btn-create">
+                  <button
+                    type="submit"
+                    className="persona-btn-create"
+                    onClick={handleSavePersona}
+                  >
                     {editingPersona ? "Save Changes" : "Create Persona"}
                   </button>
                 </div>
