@@ -280,10 +280,10 @@
 .persona-avatar-img {
   width: 52px;
   height: 52px;
-  border-radius: 50%;
+  border-radius: 12px;
   object-fit: cover;
   border: 2px solid var(--ads-border);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
   background-color: #1d2125;
   display: block;
 }
@@ -291,7 +291,7 @@
 .persona-avatar-fallback {
   width: 52px;
   height: 52px;
-  border-radius: 50%;
+  border-radius: 12px;
   background: linear-gradient(135deg, #579dff 0%, #8546ff 100%);
   color: #ffffff;
   display: flex;
@@ -299,7 +299,7 @@
   justify-content: center;
   font-weight: 700;
   font-size: 18px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
 }
 
 .persona-card-meta {
@@ -1473,21 +1473,80 @@
   margin-bottom: 10px;
 }
 
-.persona-avatar-picker-row {
+.persona-avatar-header-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.persona-avatar-style-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.persona-avatar-tab-btn {
+  background: var(--ads-surface-inset);
+  border: 1px solid var(--ads-border);
+  color: var(--ads-text-subtle);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.persona-avatar-tab-btn:hover {
+  background: var(--ads-surface-hover);
+  color: var(--ads-text-primary);
+  border-color: var(--ads-border-hover);
+}
+
+.persona-avatar-tab-btn.active {
+  background: var(--trello-blue-subtle);
+  border-color: var(--trello-blue-border);
+  color: var(--trello-blue);
+}
+
+.persona-avatar-random-btn {
+  background: transparent;
+  border: 1px dashed var(--ads-border);
+  color: var(--ads-text-subtle);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.persona-avatar-random-btn:hover {
+  border-color: var(--trello-blue);
+  color: var(--trello-blue);
+  background: var(--trello-blue-subtle);
+}
+
+.persona-avatar-picker-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: 12px;
 }
 
 .persona-avatar-main-preview {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
+  width: 68px;
+  height: 68px;
+  border-radius: 14px;
   border: 3px solid var(--trello-blue);
   padding: 2px;
   background: var(--ads-surface-inset);
-  box-shadow: 0 0 14px rgba(87, 157, 255, 0.35);
+  box-shadow: 0 0 16px rgba(87, 157, 255, 0.35);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -1498,56 +1557,128 @@
 .persona-avatar-preview-img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 10px;
   object-fit: cover;
   display: block;
 }
 
-.persona-avatar-preset-list {
+.persona-avatar-grid-wrapper {
+  flex: 1;
   display: flex;
-  align-items: center;
-  gap: 9px;
-  overflow-x: auto;
-  padding: 4px 2px;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.persona-avatar-preset-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.persona-avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  background: var(--ads-surface-inset);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--ads-border);
+  max-height: 230px;
+  overflow-y: auto;
+}
+
+.persona-avatar-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.persona-avatar-grid::-webkit-scrollbar-thumb {
+  background: var(--ads-border);
+  border-radius: 4px;
+}
+
+.persona-avatar-grid-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 9px;
   border: 2px solid transparent;
   padding: 0;
   background: transparent;
   cursor: pointer;
-  transition: all 0.15s ease;
-  flex-shrink: 0;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  position: relative;
 }
 
-.persona-avatar-preset-btn:hover {
-  transform: scale(1.08);
+.persona-avatar-grid-btn:hover {
+  transform: scale(1.12);
+  border-color: rgba(87, 157, 255, 0.7);
+  z-index: 2;
 }
 
-.persona-avatar-preset-btn.selected {
-  border-color: var(--trello-blue);
-  box-shadow: 0 0 0 2px rgba(87, 157, 255, 0.4);
+.persona-avatar-grid-btn.selected {
+  border-color: #579dff;
+  box-shadow: 0 0 0 2px rgba(87, 157, 255, 0.45);
+  transform: scale(1.05);
 }
 
-.persona-avatar-preset-img {
+.persona-avatar-grid-img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 7px;
   object-fit: cover;
   display: block;
+}
+
+.persona-avatar-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.persona-avatar-upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--ads-surface-inset);
+  border: 1px solid var(--ads-border);
+  color: var(--ads-text-primary);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.persona-avatar-upload-label:hover {
+  background: var(--ads-surface-hover);
+  border-color: var(--trello-blue);
+  color: var(--trello-blue);
+}
+
+.persona-avatar-tip-note {
+  font-size: 11px;
+  color: var(--ads-text-subtle);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.persona-avatar-tip-note a {
+  color: var(--trello-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.persona-avatar-tip-note a:hover {
+  text-decoration: underline;
 }
 
 .persona-custom-avatar-box {
   position: relative;
   display: flex;
   align-items: center;
+  margin-top: 8px;
 }
 
 .persona-custom-avatar-icon {

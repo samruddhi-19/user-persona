@@ -18,17 +18,38 @@ import {
 } from "../lib/icons.jsx";
 import "./personas.css";
 
-// Preset avatars shown in the avatar picker row
-export const PRESET_AVATARS = [
-  { id: "maya", name: "Maya", url: "./avatars/maya.jpg" },
-  { id: "marcus", name: "Marcus", url: "./avatars/marcus.jpg" },
-  { id: "chloe", name: "Chloe", url: "./avatars/chloe.jpg" },
-  { id: "alex", name: "Alex", url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" },
-  { id: "sarah", name: "Sarah", url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80" },
-  { id: "elena", name: "Elena", url: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80" },
-  { id: "david", name: "David", url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
-  { id: "jordan", name: "Jordan", url: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80" },
+// 20 Curated Flat Vector Persona Avatars (Matching Competitor Grid + Robot)
+export const FLAT_AVATARS_PACK = [
+  // Row 1
+  { id: "flat-1", name: "Designer (Cyan)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Avery&backgroundColor=2cb598&radius=12" },
+  { id: "flat-2", name: "Product (Salmon)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Amaya&backgroundColor=e53e3e&radius=12" },
+  { id: "flat-3", name: "Developer (Maroon)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily&backgroundColor=742a2a&radius=12" },
+  { id: "flat-4", name: "Tech Lead (Purple)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus&backgroundColor=805ad5&radius=12" },
+  { id: "flat-5", name: "Marketer (Teal)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chloe&backgroundColor=319795&radius=12" },
+
+  // Row 2
+  { id: "flat-6", name: "Architect (Olive)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=38a169&radius=12" },
+  { id: "flat-7", name: "Executive (Magenta)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&backgroundColor=b83280&radius=12" },
+  { id: "flat-8", name: "Engineer (Cyan)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Leo&backgroundColor=319795&radius=12" },
+  { id: "flat-9", name: "UX Researcher (Dark Teal)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zoe&backgroundColor=234e52&radius=12" },
+  { id: "flat-10", name: "Data Scientist (Amber)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Oliver&backgroundColor=d69e2e&radius=12" },
+
+  // Row 3
+  { id: "flat-11", name: "Operations (Deep Cyan)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Liam&backgroundColor=285e61&radius=12" },
+  { id: "flat-12", name: "Consultant (Navy)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Aria&backgroundColor=1a365d&radius=12" },
+  { id: "flat-13", name: "Support Specialist (Coral)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ethan&backgroundColor=c53030&radius=12" },
+  { id: "flat-14", name: "Security Analyst (Mint)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena&backgroundColor=38b2ac&radius=12" },
+  { id: "flat-15", name: "DevOps Lead (Forest Green)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=James&backgroundColor=276749&radius=12" },
+
+  // Row 4
+  { id: "flat-16", name: "Senior Advisor (Light Teal)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=David&backgroundColor=4fd1c5&radius=12" },
+  { id: "flat-17", name: "Director (Peach)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie&backgroundColor=ed8936&radius=12" },
+  { id: "flat-18", name: "VP Product (Tan)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Noah&backgroundColor=c05621&radius=12" },
+  { id: "flat-19", name: "Founder (Brown)", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas&backgroundColor=744210&radius=12" },
+  { id: "flat-20", name: "PersonaBot (Blue Robot)", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PersonaBot&backgroundColor=3182ce&radius=12" },
 ];
+
+export const PRESET_AVATARS = FLAT_AVATARS_PACK;
 
 // The reference sample personas matching the user's design screenshot
 export const SAMPLE_PERSONAS = [
@@ -38,7 +59,7 @@ export const SAMPLE_PERSONAS = [
     role: "Senior Product Designer",
     age: 31,
     category: "Core Designer",
-    avatar: "./avatars/maya.jpg",
+    avatar: PRESET_AVATARS[0].url,
     bio: "Senior UX architect balancing enterprise design systems with fast sprint cycles across cross-functional product squads.",
     quote: '"If engineering doesn\'t know who they are building for, the feature is already at risk."',
     painPoints: [
@@ -66,7 +87,7 @@ export const SAMPLE_PERSONAS = [
     role: "Engineering Team Lead",
     age: 42,
     category: "Technical Leader",
-    avatar: "./avatars/marcus.jpg",
+    avatar: PRESET_AVATARS[1].url,
     bio: "Full-stack lead focusing on scalable microservices, CI/CD pipeline stability, and clean agile sprint execution.",
     quote: '"Clear context in the card means fewer meetings and faster commits."',
     painPoints: [
@@ -94,7 +115,7 @@ export const SAMPLE_PERSONAS = [
     role: "Growth Marketer & Customer Success",
     age: 26,
     category: "Growth & CS",
-    avatar: "./avatars/chloe.jpg",
+    avatar: PRESET_AVATARS[2].url,
     bio: "Customer champion tracking retention funnels, user delight scores, and bridging qualitative support feedback to product roadmaps.",
     quote: '"Customers don\'t churn because of missing code, they churn because of unresolved friction."',
     painPoints: [
@@ -124,7 +145,7 @@ const AI_TEMPLATES = [
     name: "Maya Lin",
     age: 31,
     category: "Core Designer",
-    avatar: "./avatars/maya.jpg",
+    avatar: PRESET_AVATARS[0].url,
     quote: '"If engineering doesn\'t know who they are building for, the feature is already at risk."',
     painPoints: [
       "Disconnected user feedback scattered across Jira, Slack, and emails",
@@ -144,7 +165,7 @@ const AI_TEMPLATES = [
     name: "Marcus Vance",
     age: 42,
     category: "Technical Leader",
-    avatar: "./avatars/marcus.jpg",
+    avatar: PRESET_AVATARS[1].url,
     quote: '"Clear context in the card means fewer meetings and faster commits."',
     painPoints: [
       "Vague user stories with no indication of why a feature matters to users",
@@ -164,7 +185,7 @@ const AI_TEMPLATES = [
     name: "Chloe Nguyen",
     age: 26,
     category: "Growth & CS",
-    avatar: "./avatars/chloe.jpg",
+    avatar: PRESET_AVATARS[2].url,
     quote: '"Customers don\'t churn because of missing code, they churn because of unresolved friction."',
     painPoints: [
       "User frustration with slow onboarding and hidden settings",
@@ -216,6 +237,7 @@ export default function PersonasApp({ t }) {
   const [blueprintTemplateIdx, setBlueprintTemplateIdx] = useState(0);
   const [aiPrompt, setAiPrompt] = useState("");
   const [isAiGenerating, setIsAiGenerating] = useState(false);
+  const [avatarStyleTab, setAvatarStyleTab] = useState("illustrated");
 
   // Form fields matching the new persona fields modal
   const [formData, setFormData] = useState({
@@ -237,6 +259,32 @@ export default function PersonasApp({ t }) {
 
   const currentBlueprint = AI_TEMPLATES[blueprintTemplateIdx] || AI_TEMPLATES[0];
 
+  // Automatically migrate legacy real-photo avatar paths to new flat avatar presets
+  function migrateOldAvatar(url) {
+    if (!url) return FLAT_AVATARS_PACK[0].url;
+    if (url.includes("maya.jpg")) return FLAT_AVATARS_PACK[0].url;
+    if (url.includes("marcus.jpg")) return FLAT_AVATARS_PACK[3].url;
+    if (url.includes("chloe.jpg")) return FLAT_AVATARS_PACK[4].url;
+    if (url.includes("images.unsplash.com") || url.includes("lorelei") || url.includes("notionists")) {
+      return FLAT_AVATARS_PACK[2].url;
+    }
+    return url;
+  }
+
+  // Handle local file upload (PNG, JPG, SVG, WEBP)
+  function handleAvatarFileUpload(e) {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        if (uploadEvent.target?.result) {
+          setFormData((prev) => ({ ...prev, avatar: uploadEvent.target.result }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   // Load personas from Trello board shared storage
   useEffect(() => {
     async function loadData() {
@@ -245,7 +293,7 @@ export default function PersonasApp({ t }) {
         if (t && typeof t.get === "function") {
           const stored = await t.get("board", "shared", "personas");
           if (stored && Array.isArray(stored)) {
-            setPersonas(stored);
+            setPersonas(stored.map((p) => ({ ...p, avatar: migrateOldAvatar(p.avatar) })));
           } else {
             // Initially, there are NO personas on the board
             setPersonas([]);
@@ -254,7 +302,16 @@ export default function PersonasApp({ t }) {
           // Local fallback: read localStorage
           const local = localStorage.getItem("trello_board_shared_personas");
           if (local) {
-            setPersonas(JSON.parse(local));
+            try {
+              const parsed = JSON.parse(local);
+              setPersonas(
+                Array.isArray(parsed)
+                  ? parsed.map((p) => ({ ...p, avatar: migrateOldAvatar(p.avatar) }))
+                  : []
+              );
+            } catch {
+              setPersonas([]);
+            }
           } else {
             setPersonas([]);
           }
@@ -307,6 +364,16 @@ export default function PersonasApp({ t }) {
     }
   }
 
+  // Randomize avatar generator
+  function handleRandomizeAvatar() {
+    const randomSeed = "persona_" + Math.random().toString(36).substring(2, 9);
+    const bgColors = ["b6e3f4", "c0aede", "d1d4f9", "ffd5dc", "ffdfbf", "e0e7ff", "ecfdf5", "ede9fe"];
+    const randomBg = bgColors[Math.floor(Math.random() * bgColors.length)];
+    const style = avatarStyleTab === "notion" ? "notionists" : "lorelei";
+    const newUrl = `https://api.dicebear.com/7.x/${style}/svg?seed=${randomSeed}&backgroundColor=${randomBg}`;
+    setFormData((prev) => ({ ...prev, avatar: newUrl }));
+  }
+
   // Open Create Form
   function openCreateModal() {
     setEditingPersona(null);
@@ -337,7 +404,7 @@ export default function PersonasApp({ t }) {
       age: persona.age || 28,
       role: persona.role || "",
       category: persona.category || "Target User",
-      avatar: persona.avatar || PRESET_AVATARS[0].url,
+      avatar: migrateOldAvatar(persona.avatar),
       bio: persona.bio || "",
       quote: persona.quote ? persona.quote.replace(/^"|"$/g, "") : "",
       painPoints:
@@ -557,7 +624,7 @@ export default function PersonasApp({ t }) {
           name: "Alex Rivera",
           age: 33,
           category: "Key Persona",
-          avatar: "./avatars/chloe.jpg",
+          avatar: PRESET_AVATARS[3].url,
           quote: `"Streamlined workflows for ${aiPrompt.trim()} unlock maximum productivity."`,
           painPoints: [
             `Frustration with repetitive tasks in ${aiPrompt.trim()} workflows`,
@@ -1121,44 +1188,83 @@ export default function PersonasApp({ t }) {
             {/* Scrollable Form Body */}
             <form onSubmit={handleSavePersona} className="persona-create-form">
               <div className="persona-create-body">
-                {/* 1. CHOOSE AVATAR Section */}
+                {/* 1. CHOOSE AVATAR Section (5x4 Grid of 20 Flat Avatars + Upload + Pro Tip) */}
                 <div className="persona-section-group">
-                  <label className="persona-section-heading">CHOOSE AVATAR</label>
+                  <div className="persona-avatar-header-row">
+                    <label className="persona-section-heading" style={{ marginBottom: 0 }}>
+                      Choose or upload an avatar...
+                    </label>
+                  </div>
+
                   <div className="persona-avatar-picker-row">
-                    <div className="persona-avatar-main-preview">
+                    {/* Main Preview (Rounded Square) */}
+                    <div className="persona-avatar-main-preview" title="Selected Persona Avatar">
                       <img
-                        src={formData.avatar || PRESET_AVATARS[0].url}
+                        src={formData.avatar || FLAT_AVATARS_PACK[0].url}
                         alt="Selected Avatar"
                         className="persona-avatar-preview-img"
                         onError={(e) => {
-                          e.currentTarget.src = PRESET_AVATARS[0].url;
+                          e.currentTarget.src = FLAT_AVATARS_PACK[0].url;
                         }}
                       />
                     </div>
-                    <div className="persona-avatar-preset-list">
-                      {PRESET_AVATARS.map((av) => (
-                        <button
-                          key={av.id}
-                          type="button"
-                          className={`persona-avatar-preset-btn ${
-                            formData.avatar === av.url ? "selected" : ""
-                          }`}
-                          onClick={() => setFormData({ ...formData, avatar: av.url })}
-                          title={`Select ${av.name}`}
+
+                    {/* 5x4 Grid of 20 Flat Vector Avatars */}
+                    <div className="persona-avatar-grid-wrapper">
+                      <div className="persona-avatar-grid">
+                        {FLAT_AVATARS_PACK.map((av) => (
+                          <button
+                            key={av.id}
+                            type="button"
+                            className={`persona-avatar-grid-btn ${
+                              formData.avatar === av.url ? "selected" : ""
+                            }`}
+                            onClick={() => setFormData({ ...formData, avatar: av.url })}
+                            title={av.name}
+                          >
+                            <img
+                              src={av.url}
+                              alt={av.name}
+                              className="persona-avatar-grid-img"
+                              onError={(e) => {
+                                e.currentTarget.src = FLAT_AVATARS_PACK[0].url;
+                              }}
+                            />
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Upload Own Image Button & UI Faces Pro Tip */}
+                      <div className="persona-avatar-actions-bar">
+                        <input
+                          type="file"
+                          id="persona-avatar-file-upload"
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          onChange={handleAvatarFileUpload}
+                        />
+                        <label
+                          htmlFor="persona-avatar-file-upload"
+                          className="persona-avatar-upload-label"
                         >
-                          <img
-                            src={av.url}
-                            alt={av.name}
-                            className="persona-avatar-preset-img"
-                            onError={(e) => {
-                              e.currentTarget.src = "./avatars/maya.jpg";
-                            }}
-                          />
-                        </button>
-                      ))}
+                          <ImageIcon width={14} height={14} />
+                          Upload your own image
+                        </label>
+                        <span className="persona-avatar-tip-note">
+                          Pro Tip! You can search for persona avatars on{" "}
+                          <a
+                            href="https://uifaces.co"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            uifaces.co
+                          </a>
+                        </span>
+                      </div>
                     </div>
                   </div>
 
+                  {/* Custom image URL paste input */}
                   <div className="persona-custom-avatar-box">
                     <span className="persona-custom-avatar-icon">
                       <ImageIcon width={16} height={16} />
@@ -1166,8 +1272,18 @@ export default function PersonasApp({ t }) {
                     <input
                       type="url"
                       className="persona-custom-avatar-input"
-                      placeholder="Or paste custom image URL..."
-                      value={formData.avatar}
+                      placeholder={
+                        FLAT_AVATARS_PACK.some((av) => av.url === formData.avatar)
+                          ? `Selected preset: ${
+                              FLAT_AVATARS_PACK.find((av) => av.url === formData.avatar)?.name
+                            } (or paste custom image URL to override)`
+                          : "Or paste custom image URL..."
+                      }
+                      value={
+                        FLAT_AVATARS_PACK.some((av) => av.url === formData.avatar)
+                          ? ""
+                          : formData.avatar
+                      }
                       onChange={(e) =>
                         setFormData({ ...formData, avatar: e.target.value })
                       }
