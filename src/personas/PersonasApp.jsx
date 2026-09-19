@@ -18,29 +18,22 @@ import {
 } from "../lib/icons.jsx";
 import "./personas.css";
 
-// Curated High-Resolution Professional Real Human Faces (Matching Design Spec)
-export const REAL_FACES_PACK = [
-  { id: "real-1", name: "Maya (UX Designer)", url: "./avatars/maya.jpg" },
-  { id: "real-2", name: "Elena (Operations)", url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-3", name: "David (Security)", url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-4", name: "Emily (Frontend Dev)", url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-5", name: "Alex (Product Manager)", url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-6", name: "Sarah (Data Analyst)", url: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-7", name: "Sophia (Brand Designer)", url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-8", name: "Robert (Enterprise IT)", url: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-9", name: "Michael (Engineering Lead)", url: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-10", name: "Marcus (Tech Lead)", url: "./avatars/marcus.jpg" },
-  { id: "real-11", name: "Chloe (Growth & CS)", url: "./avatars/chloe.jpg" },
-  { id: "real-12", name: "Jordan (Customer Success)", url: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-13", name: "Carlos (Scrum Master)", url: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-14", name: "Olivia (Product Strategist)", url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-15", name: "Daniel (QA Specialist)", url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-16", name: "Nathan (Cloud Architect)", url: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-17", name: "Grace (Customer Support)", url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=160&auto=format&fit=crop&q=80" },
-  { id: "real-18", name: "Hannah (Operations Manager)", url: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=160&auto=format&fit=crop&q=80" },
+// 10 Curated Competitor-Style Flat Vector Avatars with Long Shadow (Matching Design Spec)
+export const FLAT_AVATARS_PACK = [
+  { id: "flat-1", name: "Maya Lin (Amber / Ponytail)", url: "./avatars/avatar-3.png" },
+  { id: "flat-2", name: "Marcus Vance (Salmon / Tech Lead)", url: "./avatars/avatar-2.png" },
+  { id: "flat-3", name: "Chloe Chen (Teal / Glasses)", url: "./avatars/avatar-9.png" },
+  { id: "flat-4", name: "Alex Rivera (Cyan / Beard & Glasses)", url: "./avatars/avatar-8.png" },
+  { id: "flat-5", name: "Elena Rostova (Blue / Curly Hair)", url: "./avatars/avatar-12.png" },
+  { id: "flat-6", name: "David Kim (Blue / Short Hair)", url: "./avatars/avatar-11.png" },
+  { id: "flat-7", name: "Sarah Jenkins (Sky Blue / Bob)", url: "./avatars/avatar-5.png" },
+  { id: "flat-8", name: "Jordan Lee (Purple / Blond Beard)", url: "./avatars/avatar-4.png" },
+  { id: "flat-9", name: "Sophia Martinez (Mint / Bangs)", url: "./avatars/avatar-14.png" },
+  { id: "flat-10", name: "Robert Vance (Slate / Suit)", url: "./avatars/avatar-16.png" },
 ];
 
-export const PRESET_AVATARS = REAL_FACES_PACK;
+export const PRESET_AVATARS = FLAT_AVATARS_PACK;
+export const REAL_FACES_PACK = FLAT_AVATARS_PACK;
 
 // The reference sample personas matching the user's design screenshot
 export const SAMPLE_PERSONAS = [
@@ -236,7 +229,7 @@ export default function PersonasApp({ t }) {
     age: 28,
     role: "",
     category: "Target User",
-    avatar: REAL_FACES_PACK[0].url,
+    avatar: PRESET_AVATARS[0].url,
     bio: "",
     quote: "",
     painPoints: ["", ""],
@@ -252,9 +245,18 @@ export default function PersonasApp({ t }) {
 
   // Automatically migrate legacy real-photo avatar paths or temporary test seeds
   function migrateOldAvatar(url) {
-    if (!url) return REAL_FACES_PACK[0].url;
-    if (url.includes("lorelei") || url.includes("notionists") || url.includes("dizzy") || url.includes("hearts")) {
-      return REAL_FACES_PACK[0].url;
+    if (!url) return PRESET_AVATARS[0].url;
+    if (
+      url.includes("lorelei") ||
+      url.includes("notionists") ||
+      url.includes("dizzy") ||
+      url.includes("hearts") ||
+      url.includes("unsplash.com") ||
+      url.includes("maya.jpg") ||
+      url.includes("marcus.jpg") ||
+      url.includes("chloe.jpg")
+    ) {
+      return PRESET_AVATARS[0].url;
     }
     return url;
   }

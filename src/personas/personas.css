@@ -280,7 +280,7 @@
 .persona-avatar-img {
   width: 52px;
   height: 52px;
-  border-radius: 50%;
+  border-radius: 12px;
   object-fit: cover;
   border: 2px solid var(--ads-border);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
@@ -291,7 +291,7 @@
 .persona-avatar-fallback {
   width: 52px;
   height: 52px;
-  border-radius: 50%;
+  border-radius: 12px;
   background: linear-gradient(135deg, #579dff 0%, #8546ff 100%);
   color: #ffffff;
   display: flex;
@@ -1484,8 +1484,8 @@
   width: 58px;
   height: 58px;
   min-width: 58px;
-  border-radius: 50%;
-  border: 3px solid #388bff;
+  border-radius: 14px;
+  border: 2.5px solid #388bff;
   padding: 2px;
   background: var(--ads-surface-inset);
   box-shadow: 0 0 0 3px rgba(56, 139, 255, 0.25);
@@ -1499,7 +1499,7 @@
 .persona-avatar-preview-img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 11px;
   object-fit: cover;
   display: block;
 }
@@ -1518,23 +1518,19 @@
   gap: 8px;
   overflow-x: auto;
   padding: 2px 2px 4px 2px;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .persona-avatar-preset-list::-webkit-scrollbar {
-  height: 4px;
-}
-
-.persona-avatar-preset-list::-webkit-scrollbar-thumb {
-  background: var(--ads-border);
-  border-radius: 2px;
+  display: none;
 }
 
 .persona-avatar-preset-btn {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
   border: 2px solid transparent;
   padding: 0;
   background: transparent;
@@ -1553,13 +1549,13 @@
 
 .persona-avatar-preset-btn.selected {
   border-color: #388bff;
-  box-shadow: 0 0 0 2px rgba(56, 139, 255, 0.4);
+  box-shadow: 0 0 0 2px rgba(56, 139, 255, 0.45);
 }
 
 .persona-avatar-preset-img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 8px;
   object-fit: cover;
   display: block;
 }
