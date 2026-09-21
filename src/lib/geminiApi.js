@@ -251,8 +251,8 @@ export function generateLocalPersona(userPrompt = "", avatarPack = []) {
           `Eliminate top 3 workflow bottlenecks in ${roleClean.slice(0, 30) || "daily operations"}`,
           "Foster 100% card context alignment across active project boards",
         ],
-    attachedCardsCount: 1,
-    attachedMembers: ["AI", "GEM"],
+    attachedCardsCount: 0,
+    attachedMembers: [],
   };
 }
 
@@ -385,8 +385,8 @@ Return ONLY the raw JSON object without markdown formatting or code blocks.`;
         goals: Array.isArray(parsed.goals) && parsed.goals.length > 0
           ? parsed.goals.slice(0, 2)
           : ["Reduce workflow friction by 20%", "Improve board empathy across the team"],
-        attachedCardsCount: 1,
-        attachedMembers: ["AI", "GEM"],
+        attachedCardsCount: 0,
+        attachedMembers: [],
       };
     } catch (err) {
       console.warn(`[User Personaa AI] Error calling ${model}:`, err);

@@ -53,13 +53,25 @@ export default function AttachPopupApp({ t }) {
     setAttachedIds(nextAttached);
     try {
       await t.set("card", "shared", "attachedPersonaIds", nextAttached);
+      localStorage.setItem("trello_card_shared_attachedPersonaIds", JSON.stringify(nextAttached));
+
+      try {
+        const card = await t.card("id");
+        if (card && card.id) {
+          const boardMap = (await t.get("board", "shared", "cardPersonaAttachments")) || {};
+          boardMap[card.id] = nextAttached;
+          await t.set("board", "shared", "cardPersonaAttachments", boardMap);
+        }
+      } catch (e) {
+        console.warn("Could not sync board attachments map:", e);
+      }
+
       // Dispatch an event so any open card section or parent iframe updates immediately
       window.dispatchEvent(
         new CustomEvent("persona-attachment-changed", {
           detail: { attachedPersonaIds: nextAttached },
         })
       );
-      localStorage.setItem("trello_card_shared_attachedPersonaIds", JSON.stringify(nextAttached));
     } catch (err) {
       console.error("Failed to update attached personas:", err);
     }

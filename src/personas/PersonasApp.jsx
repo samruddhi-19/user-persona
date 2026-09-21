@@ -63,8 +63,8 @@ export const SAMPLE_PERSONAS = [
       "Deliver cohesive user flows that reduce onboarding churn by 25%",
       "Embed persona empathy directly into technical backlog planning",
     ],
-    attachedCardsCount: 3,
-    attachedMembers: ["CCO", "JD", "ML"],
+    attachedCardsCount: 0,
+    attachedMembers: [],
   },
   {
     id: "persona-marcus-vance",
@@ -91,8 +91,8 @@ export const SAMPLE_PERSONAS = [
       "Maintain 99.9% sprint delivery accuracy with zero blocker ambiguities",
       "Reduce developer context-switching through self-contained Trello tickets",
     ],
-    attachedCardsCount: 2,
-    attachedMembers: ["CO", "MV"],
+    attachedCardsCount: 0,
+    attachedMembers: [],
   },
   {
     id: "persona-chloe-nguyen",
@@ -119,8 +119,8 @@ export const SAMPLE_PERSONAS = [
       "Increase trial-to-paid conversion by fixing top 5 UI bottlenecks",
       "Unify survey feedback into weekly agile sprint prioritizations",
     ],
-    attachedCardsCount: 2,
-    attachedMembers: ["CO", "CN"],
+    attachedCardsCount: 0,
+    attachedMembers: [],
   },
 ];
 
@@ -225,6 +225,7 @@ export default function PersonasApp({ t }) {
   const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [avatarStyleTab, setAvatarStyleTab] = useState("real");
   const [confirmDialog, setConfirmDialog] = useState(null);
+  const [cardAttachmentMap, setCardAttachmentMap] = useState({});
 
   // Form fields matching the new persona fields modal
   const [formData, setFormData] = useState({
@@ -291,6 +292,9 @@ export default function PersonasApp({ t }) {
             // Initially, there are NO personas on the board
             setPersonas([]);
           }
+
+          const boardAttachments = (await t.get("board", "shared", "cardPersonaAttachments")) || {};
+          setCardAttachmentMap(boardAttachments);
         } else {
           // Local fallback: read localStorage
           const local = localStorage.getItem("trello_board_shared_personas");
@@ -317,6 +321,15 @@ export default function PersonasApp({ t }) {
       }
     }
     loadData();
+
+    const handleSync = () => loadData();
+    window.addEventListener("persona-attachment-changed", handleSync);
+    window.addEventListener("storage", handleSync);
+
+    return () => {
+      window.removeEventListener("persona-attachment-changed", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
   }, [t]);
 
   // Persist personas to Trello board storage
@@ -1142,12 +1155,36 @@ export default function PersonasApp({ t }) {
                     </>
                   )}
 
-                  {/* Footer: Attached Cards count & card avatars */}
+                  {/* Footer: Live Attached Cards count */}
                   <div className="persona-card-footer">
                     <div className="attached-cards-badge">
                       <CardsStackIcon width={16} height={16} />
                       <span>
-                        Attached to {persona.attachedCardsCount || 0} Cards
+                        {(() => {
+                          let count = 0;
+                          for (const cId in cardAttachmentMap) {
+                            if (
+                              Array.isArray(cardAttachmentMap[cId]) &&
+                              cardAttachmentMap[cId].includes(persona.id)
+                            ) {
+                              count++;
+                            }
+                          }
+                          // Fallback to local storage if board map is empty
+                          if (count === 0 && Object.keys(cardAttachmentMap).length === 0) {
+                            try {
+                              const localCardAttached = JSON.parse(
+                                localStorage.getItem("trello_card_shared_attachedPersonaIds") || "[]"
+                              );
+                              if (localCardAttached.includes(persona.id)) {
+                                count = 1;
+                              }
+                            } catch {}
+                          }
+                          if (count === 0) return "Not attached to any cards";
+                          if (count === 1) return "Attached to 1 card";
+                          return `Attached to ${count} cards`;
+                        })()}
                       </span>
                     </div>
 
@@ -1165,13 +1202,15 @@ export default function PersonasApp({ t }) {
                       </div>
                     )}
 
-                    <div className="attached-avatars-group">
-                      {(persona.attachedMembers || ["CO", "JD"]).map((initials, i) => (
-                        <div key={i} className="attached-avatar-circle" title="Active card link">
-                          {initials}
-                        </div>
-                      ))}
-                    </div>
+                    {Array.isArray(persona.attachedMembers) && persona.attachedMembers.length > 0 && (
+                      <div className="attached-avatars-group">
+                        {persona.attachedMembers.map((initials, i) => (
+                          <div key={i} className="attached-avatar-circle" title="Assigned member">
+                            {initials}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </article>
               );

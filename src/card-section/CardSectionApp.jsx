@@ -37,6 +37,17 @@ export default function CardSectionApp({ t }) {
 
       setBoardPersonas(bPersonas);
       setAttachedIds(cardAttached);
+
+      try {
+        const card = await t.card("id");
+        if (card && card.id) {
+          const boardMap = (await t.get("board", "shared", "cardPersonaAttachments")) || {};
+          if (JSON.stringify(boardMap[card.id]) !== JSON.stringify(cardAttached)) {
+            boardMap[card.id] = cardAttached;
+            await t.set("board", "shared", "cardPersonaAttachments", boardMap);
+          }
+        }
+      } catch (e) {}
     } catch (err) {
       console.error("Error loading card section data:", err);
       setBoardPersonas(SAMPLE_PERSONAS);
@@ -114,6 +125,15 @@ export default function CardSectionApp({ t }) {
     try {
       await t.set("card", "shared", "attachedPersonaIds", nextAttached);
       localStorage.setItem("trello_card_shared_attachedPersonaIds", JSON.stringify(nextAttached));
+
+      try {
+        const card = await t.card("id");
+        if (card && card.id) {
+          const boardMap = (await t.get("board", "shared", "cardPersonaAttachments")) || {};
+          boardMap[card.id] = nextAttached;
+          await t.set("board", "shared", "cardPersonaAttachments", boardMap);
+        }
+      } catch (e) {}
     } catch (err) {
       console.error("Failed to detach persona:", err);
     }
