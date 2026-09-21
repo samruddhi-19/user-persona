@@ -4,7 +4,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from "../lib/icons.jsx";
-import { SAMPLE_PERSONAS } from "../personas/PersonasApp.jsx";
+import { SAMPLE_PERSONAS } from "../lib/samplePersonas.js";
 import "./card-section.css";
 
 export default function CardSectionApp({ t }) {
@@ -32,6 +32,12 @@ export default function CardSectionApp({ t }) {
           cardAttached = cleaned;
           await t.set("card", "shared", "attachedPersonaIds", cleaned);
           localStorage.setItem("trello_card_shared_attachedPersonaIds", JSON.stringify(cleaned));
+
+          const cleanedPersonas = bPersonas
+            .filter((p) => cleaned.includes(p.id))
+            .map((p) => ({ id: p.id, name: p.name, avatar: p.avatar, role: p.role }));
+          await t.set("card", "shared", "attachedPersonas", cleanedPersonas);
+          localStorage.setItem("trello_card_shared_attachedPersonas", JSON.stringify(cleanedPersonas));
         }
       }
 
@@ -122,9 +128,21 @@ export default function CardSectionApp({ t }) {
     if (e) e.stopPropagation();
     const nextAttached = attachedIds.filter((id) => id !== personaId);
     setAttachedIds(nextAttached);
+
+    const nextAttachedPersonas = boardPersonas
+      .filter((p) => nextAttached.includes(p.id))
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        avatar: p.avatar,
+        role: p.role,
+      }));
+
     try {
       await t.set("card", "shared", "attachedPersonaIds", nextAttached);
+      await t.set("card", "shared", "attachedPersonas", nextAttachedPersonas);
       localStorage.setItem("trello_card_shared_attachedPersonaIds", JSON.stringify(nextAttached));
+      localStorage.setItem("trello_card_shared_attachedPersonas", JSON.stringify(nextAttachedPersonas));
 
       try {
         const card = await t.card("id");
@@ -134,6 +152,15 @@ export default function CardSectionApp({ t }) {
           await t.set("board", "shared", "cardPersonaAttachments", boardMap);
         }
       } catch (e) {}
+
+      window.dispatchEvent(
+        new CustomEvent("persona-attachment-changed", {
+          detail: {
+            attachedPersonaIds: nextAttached,
+            attachedPersonas: nextAttachedPersonas,
+          },
+        })
+      );
     } catch (err) {
       console.error("Failed to detach persona:", err);
     }

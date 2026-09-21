@@ -19,110 +19,14 @@ import {
 import { EXAMPLE_PROMPTS, generatePersonaWithGemini } from "../lib/geminiApi.js";
 import "./personas.css";
 
-// 10 Curated Competitor-Style Flat Vector Avatars with Long Shadow (Matching Design Spec)
-export const FLAT_AVATARS_PACK = [
-  { id: "flat-1", name: "Maya Lin (Amber / Ponytail)", url: "./avatars/avatar-3.png" },
-  { id: "flat-2", name: "Marcus Vance (Salmon / Tech Lead)", url: "./avatars/avatar-2.png" },
-  { id: "flat-3", name: "Chloe Chen (Teal / Glasses)", url: "./avatars/avatar-9.png" },
-  { id: "flat-4", name: "Alex Rivera (Cyan / Beard & Glasses)", url: "./avatars/avatar-8.png" },
-  { id: "flat-5", name: "Elena Rostova (Blue / Curly Hair)", url: "./avatars/avatar-12.png" },
-  { id: "flat-6", name: "David Kim (Blue / Short Hair)", url: "./avatars/avatar-11.png" },
-  { id: "flat-7", name: "Sarah Jenkins (Sky Blue / Bob)", url: "./avatars/avatar-5.png" },
-  { id: "flat-8", name: "Jordan Lee (Purple / Blond Beard)", url: "./avatars/avatar-4.png" },
-  { id: "flat-9", name: "Sophia Martinez (Mint / Bangs)", url: "./avatars/avatar-14.png" },
-  { id: "flat-10", name: "Robert Vance (Slate / Suit)", url: "./avatars/avatar-16.png" },
-];
+import {
+  FLAT_AVATARS_PACK,
+  PRESET_AVATARS,
+  REAL_FACES_PACK,
+  SAMPLE_PERSONAS,
+} from "../lib/samplePersonas.js";
 
-export const PRESET_AVATARS = FLAT_AVATARS_PACK;
-export const REAL_FACES_PACK = FLAT_AVATARS_PACK;
-
-// The reference sample personas matching the user's design screenshot
-export const SAMPLE_PERSONAS = [
-  {
-    id: "persona-maya-lin",
-    name: "Maya Lin",
-    role: "Senior Product Designer",
-    age: 31,
-    category: "Core Designer",
-    avatar: PRESET_AVATARS[0].url,
-    bio: "Senior UX architect balancing enterprise design systems with fast sprint cycles across cross-functional product squads.",
-    quote: '"If engineering doesn\'t know who they are building for, the feature is already at risk."',
-    painPoints: [
-      "Disconnected user feedback scattered across Jira, Slack, and emails",
-      "Features getting built without clear user empathy or target audience context",
-      "Lack of quick persona visibility inside day-to-day sprint cards",
-      "Misalignment between UX wireframes and delivered engineering releases",
-    ],
-    motivations: [
-      "Advocating for the end-user throughout every engineering ticket",
-      "Streamlining cross-functional handoffs with clear persona anchors",
-      "Validating design iterations with quantitative survey evidence",
-      "Fostering shared customer understanding across product and dev teams",
-    ],
-    goals: [
-      "Deliver cohesive user flows that reduce onboarding churn by 25%",
-      "Embed persona empathy directly into technical backlog planning",
-    ],
-    attachedCardsCount: 0,
-    attachedMembers: [],
-  },
-  {
-    id: "persona-marcus-vance",
-    name: "Marcus Vance",
-    role: "Engineering Team Lead",
-    age: 42,
-    category: "Technical Leader",
-    avatar: PRESET_AVATARS[1].url,
-    bio: "Full-stack lead focusing on scalable microservices, CI/CD pipeline stability, and clean agile sprint execution.",
-    quote: '"Clear context in the card means fewer meetings and faster commits."',
-    painPoints: [
-      "Vague user stories with no indication of why a feature matters to users",
-      "Scope creep caused by shifting requirements mid-sprint",
-      "Complex tool switching between analytics dashboards and ticket boards",
-      "Late-stage rework due to ambiguous acceptance criteria",
-    ],
-    motivations: [
-      "Shipping clean, maintainable architecture on predictable timelines",
-      "Empowering engineers with high-context task descriptions",
-      "Eliminating ambiguity in bug tickets and user story cards",
-      "Reducing sync meetings through self-documenting agile workflows",
-    ],
-    goals: [
-      "Maintain 99.9% sprint delivery accuracy with zero blocker ambiguities",
-      "Reduce developer context-switching through self-contained Trello tickets",
-    ],
-    attachedCardsCount: 0,
-    attachedMembers: [],
-  },
-  {
-    id: "persona-chloe-nguyen",
-    name: "Chloe Nguyen",
-    role: "Growth Marketer & Customer Success",
-    age: 26,
-    category: "Growth & CS",
-    avatar: PRESET_AVATARS[2].url,
-    bio: "Customer champion tracking retention funnels, user delight scores, and bridging qualitative support feedback to product roadmaps.",
-    quote: '"Customers don\'t churn because of missing code, they churn because of unresolved friction."',
-    painPoints: [
-      "User frustration with slow onboarding and hidden settings",
-      "Difficulty relaying customer churn feedback directly to dev cards",
-      "Time-consuming data consolidation from survey spreadsheets",
-      "Slow turnaround on small usability bug fixes impacting retention",
-    ],
-    motivations: [
-      "Boosting retention through delightfully intuitive user experiences",
-      "Championing customer survey insights into actionable board items",
-      "Tracking user engagement uplift from newly released features",
-      "Bridging marketing campaign expectations with core product flows",
-    ],
-    goals: [
-      "Increase trial-to-paid conversion by fixing top 5 UI bottlenecks",
-      "Unify survey feedback into weekly agile sprint prioritizations",
-    ],
-    attachedCardsCount: 0,
-    attachedMembers: [],
-  },
-];
+export { FLAT_AVATARS_PACK, PRESET_AVATARS, REAL_FACES_PACK, SAMPLE_PERSONAS };
 
 const AI_TEMPLATES = [
   {
@@ -265,15 +169,33 @@ export default function PersonasApp({ t }) {
     return url;
   }
 
-  // Handle local file upload (PNG, JPG, SVG, WEBP)
+  // Handle local file upload (PNG, JPG, SVG, WEBP) with automatic downscaling to fit Trello pluginData limit
   function handleAvatarFileUpload(e) {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (uploadEvent) => {
-        if (uploadEvent.target?.result) {
-          setFormData((prev) => ({ ...prev, avatar: uploadEvent.target.result }));
-        }
+        const rawResult = uploadEvent.target?.result;
+        if (!rawResult) return;
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const canvas = document.createElement("canvas");
+            const size = 64;
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, size, size);
+            const compressed = canvas.toDataURL("image/jpeg", 0.8);
+            setFormData((prev) => ({ ...prev, avatar: compressed }));
+          } catch {
+            setFormData((prev) => ({ ...prev, avatar: rawResult }));
+          }
+        };
+        img.onerror = () => {
+          setFormData((prev) => ({ ...prev, avatar: rawResult }));
+        };
+        img.src = rawResult;
       };
       reader.readAsDataURL(file);
     }

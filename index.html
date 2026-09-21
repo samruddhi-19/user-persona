@@ -325,6 +325,10 @@
                 <span>Connector Iframe</span>
                 <code>powerup.html</code>
               </button>
+              <button class="nav-pill" onclick="switchPreview('card-front-preview', 'Card Front Badges Preview (Trello Board View)', this)">
+                <span>Card Front Badges</span>
+                <code>card-badges</code>
+              </button>
               <button class="nav-pill" onclick="switchPreview('./card-section.html', 'Card Empathy Section (card-section.html)', this)">
                 <span>Card Empathy Section</span>
                 <code>card-section.html</code>
@@ -372,6 +376,57 @@
             </div>
             <div class="preview-iframe-wrapper wide-wrapper">
               <iframe id="preview-frame" class="wide-view" src="./personas.html"></iframe>
+
+              <!-- Interactive Trello Board Card Front Preview Mock -->
+              <div id="card-front-mock" style="display: none; width: 100%; height: 100%; padding: 40px; box-sizing: border-box; justify-content: center; align-items: flex-start; overflow-y: auto;">
+                <div style="width: 320px; background: #101204; border-radius: 12px; padding: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08);">
+                  <!-- List Header -->
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding: 0 4px;">
+                    <div style="font-size: 14px; font-weight: 600; color: #b6c2cf;">In Progress (Sprint 24)</div>
+                    <span style="color: #9fadbc; font-size: 16px; cursor: pointer;">•••</span>
+                  </div>
+
+                  <!-- Trello Card on the Board Front -->
+                  <div style="background: #22272b; border-radius: 8px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Card Labels -->
+                    <div style="display: flex; gap: 6px;">
+                      <span style="background: #579dff; color: #1d2125; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">UX Spec</span>
+                      <span style="background: #a548ff; color: #ffffff; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">Core Flow</span>
+                    </div>
+
+                    <!-- Card Title -->
+                    <div style="font-size: 14px; font-weight: 500; color: #dee4ea; line-height: 1.4;">
+                      Redesign customer onboarding journey for first-time product teams
+                    </div>
+
+                    <!-- Trello Card Front Badges Container (Live) -->
+                    <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #738496; font-weight: 600;">
+                        Attached Persona Badges
+                      </div>
+
+                      <div id="mock-badges-list" style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                        <!-- Injected live from localStorage -->
+                      </div>
+                    </div>
+
+                    <!-- Card Footer Actions -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; font-size: 12px; color: #8c9bab;">
+                      <div style="display: flex; gap: 10px;">
+                        <span title="Comments">💬 3</span>
+                        <span title="Checklists">☑️ 2/4</span>
+                      </div>
+                      <button
+                        type="button"
+                        onclick="switchPreview('./attach-popup.html', 'Attach Personas Popup (attach-popup.html)', document.querySelectorAll('.nav-pill')[5])"
+                        style="background: rgba(87,157,255,0.15); color: #579dff; border: 1px solid rgba(87,157,255,0.3); border-radius: 6px; padding: 3px 8px; font-size: 11.5px; cursor: pointer;"
+                      >
+                        + Manage Personas
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -379,20 +434,76 @@
     </main>
 
     <script>
+      function renderMockBadges() {
+        const listEl = document.getElementById("mock-badges-list");
+        if (!listEl) return;
+
+        let attached = [];
+        try {
+          const direct = localStorage.getItem("trello_card_shared_attachedPersonas");
+          if (direct) {
+            attached = JSON.parse(direct);
+          }
+        } catch {}
+
+        if (!attached || !attached.length) {
+          try {
+            const idsRaw = localStorage.getItem("trello_card_shared_attachedPersonaIds");
+            const ids = idsRaw ? JSON.parse(idsRaw) : [];
+            const samplePersonas = [
+              { id: "persona-maya-lin", name: "Maya Lin", avatar: "./avatars/avatar-3.png" },
+              { id: "persona-marcus-vance", name: "Marcus Vance", avatar: "./avatars/avatar-2.png" },
+              { id: "persona-chloe-nguyen", name: "Chloe Nguyen", avatar: "./avatars/avatar-9.png" },
+            ];
+            attached = ids.map(id => samplePersonas.find(p => p.id === id) || { id, name: id.replace("persona-", ""), avatar: "./icons/icon.svg" });
+          } catch {}
+        }
+
+        if (!attached || !attached.length) {
+          listEl.innerHTML = '<span style="color: #738496; font-size: 11.5px; font-style: italic;">No personas attached yet. Click "+ Manage Personas" to attach.</span>';
+          return;
+        }
+
+        listEl.innerHTML = attached
+          .map(p => {
+            const firstName = p.name ? p.name.trim().split(/\\s+/)[0] : "Persona";
+            return `
+              <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 3px 7px; font-size: 12px; color: #dee4ea; font-weight: 500;">
+                <img src="${p.avatar || './avatars/avatar-3.png'}" alt="${p.name}" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" onerror="this.src='./icons/icon.svg';" />
+                <span>${firstName}</span>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
       function switchPreview(url, title, el) {
         const frame = document.getElementById("preview-frame");
+        const mock = document.getElementById("card-front-mock");
         const wrapper = document.querySelector(".preview-iframe-wrapper");
 
-        frame.src = url;
         document.getElementById("preview-heading").textContent = title;
-        document.getElementById("direct-link").href = url;
 
-        if (url.includes("personas.html") || url.includes("card-section.html")) {
-          wrapper.classList.add("wide-wrapper");
-          frame.classList.add("wide-view");
-        } else {
+        if (url === "card-front-preview") {
+          frame.style.display = "none";
+          mock.style.display = "flex";
           wrapper.classList.remove("wide-wrapper");
-          frame.classList.remove("wide-view");
+          renderMockBadges();
+          document.getElementById("direct-link").style.display = "none";
+        } else {
+          frame.style.display = "block";
+          mock.style.display = "none";
+          frame.src = url;
+          document.getElementById("direct-link").style.display = "inline";
+          document.getElementById("direct-link").href = url;
+
+          if (url.includes("personas.html") || url.includes("card-section.html")) {
+            wrapper.classList.add("wide-wrapper");
+            frame.classList.add("wide-view");
+          } else {
+            wrapper.classList.remove("wide-wrapper");
+            frame.classList.remove("wide-view");
+          }
         }
 
         document.querySelectorAll(".nav-pill").forEach(function(pill) {
@@ -400,6 +511,9 @@
         });
         if (el) el.classList.add("active");
       }
+
+      window.addEventListener("storage", renderMockBadges);
+      window.addEventListener("persona-attachment-changed", renderMockBadges);
     </script>
   </body>
 </html>

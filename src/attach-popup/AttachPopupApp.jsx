@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SearchIcon, CheckIcon, XCloseIcon } from "../lib/icons.jsx";
-import { SAMPLE_PERSONAS } from "../personas/PersonasApp.jsx";
+import { SAMPLE_PERSONAS } from "../lib/samplePersonas.js";
 import "./attach-popup.css";
 
 export default function AttachPopupApp({ t }) {
@@ -51,9 +51,32 @@ export default function AttachPopupApp({ t }) {
     }
 
     setAttachedIds(nextAttached);
+
+    // Compute minimal representation of attached personas to store directly on card
+    const nextAttachedPersonas = personas
+      .filter((p) => nextAttached.includes(p.id))
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        avatar: p.avatar,
+        role: p.role,
+      }));
+
     try {
       await t.set("card", "shared", "attachedPersonaIds", nextAttached);
+      await t.set("card", "shared", "attachedPersonas", nextAttachedPersonas);
       localStorage.setItem("trello_card_shared_attachedPersonaIds", JSON.stringify(nextAttached));
+      localStorage.setItem("trello_card_shared_attachedPersonas", JSON.stringify(nextAttachedPersonas));
+
+      // Ensure board personas are initialized in board storage if they were not saved yet
+      try {
+        const storedBoardPersonas = await t.get("board", "shared", "personas");
+        if (!storedBoardPersonas || !Array.isArray(storedBoardPersonas) || storedBoardPersonas.length === 0) {
+          await t.set("board", "shared", "personas", personas);
+        }
+      } catch (e) {
+        console.warn("Could not ensure board personas in storage:", e);
+      }
 
       try {
         const card = await t.card("id");
@@ -69,7 +92,10 @@ export default function AttachPopupApp({ t }) {
       // Dispatch an event so any open card section or parent iframe updates immediately
       window.dispatchEvent(
         new CustomEvent("persona-attachment-changed", {
-          detail: { attachedPersonaIds: nextAttached },
+          detail: {
+            attachedPersonaIds: nextAttached,
+            attachedPersonas: nextAttachedPersonas,
+          },
         })
       );
     } catch (err) {
