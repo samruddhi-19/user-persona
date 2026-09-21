@@ -152,24 +152,26 @@ export function PlusIcon({ width = 16, height = 16, ...props }) {
   );
 }
 
-export function SparklesIcon({ width = 16, height = 16, ...props }) {
+export function SparklesIcon({ width = 16, height = 16, fill = "currentColor", ...props }) {
   return (
     <svg
       width={width}
       height={height}
       viewBox="0 0 24 24"
       fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
-      <path d="M5 3v4" />
-      <path d="M3 5h4" />
-      <path d="M19 17v4" />
-      <path d="M17 19h4" />
+      {/* Primary Gemini 4-pointed star */}
+      <path
+        d="M13.5 2C13.5 7.52 9.52 11.5 4 11.5C9.52 11.5 13.5 15.48 13.5 21C13.5 15.48 17.48 11.5 23 11.5C17.48 11.5 13.5 7.52 13.5 2Z"
+        fill={fill}
+      />
+      {/* Secondary companion 4-pointed star */}
+      <path
+        d="M5.5 14C5.5 16.5 3.5 18.5 1 18.5C3.5 18.5 5.5 20.5 5.5 23C5.5 20.5 7.5 18.5 10 18.5C7.5 18.5 5.5 16.5 5.5 14Z"
+        fill={fill}
+      />
     </svg>
   );
 }

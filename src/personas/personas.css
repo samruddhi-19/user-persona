@@ -2074,3 +2074,320 @@
   font-weight: 500;
 }
 
+/* ==========================================================================
+   Draft Persona with AI Modal (Matching UI Layout in User Theme)
+   ========================================================================== */
+.ai-modal-overlay {
+  background-color: rgba(9, 12, 16, 0.78);
+  backdrop-filter: blur(5px);
+  z-index: 1100;
+}
+
+.ai-draft-dialog {
+  max-width: 620px;
+  width: 100%;
+  border-radius: 16px;
+  background: var(--ads-surface-card);
+  border: 1px solid var(--ads-border);
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+@keyframes modalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Header Banner */
+.ai-modal-header {
+  background: linear-gradient(135deg, #182236 0%, #1e1b4b 55%, #2a1548 100%);
+  border-bottom: 1px solid rgba(87, 157, 255, 0.22);
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  position: relative;
+}
+
+.ai-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1;
+}
+
+.ai-header-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fde047;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ai-header-text {
+  flex: 1;
+}
+
+.ai-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.ai-header-title {
+  font-family: "Outfit", sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.ai-gemini-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fde047;
+  background: rgba(234, 179, 8, 0.18);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  border-radius: 9999px;
+  letter-spacing: 0.2px;
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.15);
+}
+
+.ai-header-subtitle {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #cbd5e1;
+  margin: 0;
+  font-weight: 400;
+}
+
+.ai-header-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.ai-header-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Modal Body */
+.ai-draft-body {
+  padding: 22px 24px;
+  background: var(--ads-surface-card);
+}
+
+.ai-section-label {
+  font-family: "Inter", sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ads-text-subtle);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.ai-prompt-textarea {
+  width: 100%;
+  min-height: 115px;
+  padding: 13px 15px;
+  background: var(--ads-surface-inset);
+  border: 1px solid var(--ads-border);
+  border-radius: 10px;
+  color: var(--ads-text-primary);
+  font-family: "Inter", -apple-system, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.55;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.ai-prompt-textarea:focus {
+  border-color: var(--trello-blue);
+  box-shadow: 0 0 0 3px rgba(87, 157, 255, 0.22);
+  background: #15191e;
+}
+
+.ai-prompt-textarea::placeholder {
+  color: #5d6b7b;
+}
+
+.ai-subrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ads-text-muted);
+}
+
+.ai-subrow-hint {
+  color: var(--ads-text-muted);
+}
+
+.ai-subrow-chars {
+  color: var(--ads-text-subtle);
+  font-weight: 500;
+}
+
+/* Example Prompts */
+.ai-examples-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ai-examples-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ads-text-primary);
+  margin-bottom: 10px;
+}
+
+.ai-bulb-icon {
+  font-size: 14px;
+}
+
+.ai-examples-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ai-example-chip {
+  background: var(--ads-surface-inset);
+  border: 1px solid var(--ads-border);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  color: var(--ads-text-subtle);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  font-family: "Inter", sans-serif;
+  line-height: 1.4;
+}
+
+.ai-example-chip:hover {
+  border-color: var(--trello-blue);
+  color: var(--trello-blue);
+  background: var(--trello-blue-subtle);
+}
+
+.ai-example-chip.active {
+  border-color: var(--trello-blue);
+  color: #ffffff;
+  background: rgba(87, 157, 255, 0.2);
+  box-shadow: 0 0 0 1px var(--trello-blue);
+}
+
+/* Modal Footer */
+.ai-modal-footer {
+  padding: 16px 24px;
+  background: var(--ads-surface-inset);
+  border-top: 1px solid var(--ads-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ai-btn-cancel {
+  background: transparent;
+  border: 1px solid var(--ads-border);
+  color: var(--ads-text-subtle);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ai-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ads-text-primary);
+  border-color: #4b5563;
+}
+
+.ai-btn-generate {
+  background: linear-gradient(135deg, #579dff 0%, #8546ff 100%);
+  color: #ffffff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(87, 157, 255, 0.35);
+  transition: all 0.18s ease;
+}
+
+.ai-btn-generate:hover:not(:disabled) {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(87, 157, 255, 0.45);
+}
+
+.ai-btn-generate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.ai-spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+

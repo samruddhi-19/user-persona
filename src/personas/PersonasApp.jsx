@@ -16,6 +16,7 @@ import {
   ImageIcon,
   FileSpreadsheetIcon,
 } from "../lib/icons.jsx";
+import { EXAMPLE_PROMPTS, generatePersonaWithGemini } from "../lib/geminiApi.js";
 import "./personas.css";
 
 // 10 Curated Competitor-Style Flat Vector Avatars with Long Shadow (Matching Design Spec)
@@ -220,6 +221,7 @@ export default function PersonasApp({ t }) {
   const [aiSelectedTemplate, setAiSelectedTemplate] = useState(0);
   const [blueprintTemplateIdx, setBlueprintTemplateIdx] = useState(0);
   const [aiPrompt, setAiPrompt] = useState("");
+  const [aiSelectedExampleIdx, setAiSelectedExampleIdx] = useState(null);
   const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [avatarStyleTab, setAvatarStyleTab] = useState("real");
 
@@ -656,53 +658,31 @@ export default function PersonasApp({ t }) {
     }
   }
 
-  // Draft with AI submission
+  // Draft with AI submission using Google Gemini / Smart Synthesizer
   async function handleGenerateAiPersona() {
+    const promptToUse =
+      aiPrompt.trim() ||
+      (aiSelectedExampleIdx !== null && EXAMPLE_PROMPTS[aiSelectedExampleIdx]
+        ? EXAMPLE_PROMPTS[aiSelectedExampleIdx].prompt
+        : "");
+    if (!promptToUse) return;
+
     setIsAiGenerating(true);
-    setTimeout(async () => {
-      let selected = AI_TEMPLATES[aiSelectedTemplate];
-      if (aiPrompt.trim()) {
-        // Custom prompt generation
-        selected = {
-          role: aiPrompt.trim(),
-          name: "Alex Rivera",
-          age: 33,
-          category: "Key Persona",
-          avatar: PRESET_AVATARS[3].url,
-          quote: `"Streamlined workflows for ${aiPrompt.trim()} unlock maximum productivity."`,
-          painPoints: [
-            `Frustration with repetitive tasks in ${aiPrompt.trim()} workflows`,
-            "Lack of visibility into real-time sprint blockers",
-            "Slow communication between teams",
-          ],
-          motivations: [
-            `Optimizing delivery metrics for ${aiPrompt.trim()}`,
-            "Fostering collaboration with actionable board cards",
-            "Continuous user feedback validation",
-          ],
-        };
-      }
-
-      const newAiPersona = {
-        id: `persona-ai-${Date.now()}`,
-        name: selected.name,
-        role: selected.role,
-        age: selected.age,
-        category: selected.category,
-        avatar: selected.avatar,
-        quote: selected.quote,
-        painPoints: selected.painPoints,
-        motivations: selected.motivations,
-        attachedCardsCount: 1,
-        attachedMembers: ["AI"],
-      };
-
-      await persistPersonas([...personas, newAiPersona]);
-      setIsAiGenerating(false);
+    try {
+      const newAiPersona = await generatePersonaWithGemini(promptToUse, FLAT_AVATARS_PACK);
+      const updated = [...personas, newAiPersona];
+      await persistPersonas(updated);
+      setActivePersonaId(newAiPersona.id);
       setIsAiModalOpen(false);
       setAiPrompt("");
-      showToast(`AI drafted persona "${newAiPersona.name}"!`);
-    }, 600);
+      setAiSelectedExampleIdx(null);
+      showToast(`✨ Gemini drafted persona "${newAiPersona.name}"!`);
+    } catch (err) {
+      console.error("AI Generation Error:", err);
+      showToast("Error generating persona. Please try again.");
+    } finally {
+      setIsAiGenerating(false);
+    }
   }
 
   // Filtered personas
@@ -1631,65 +1611,102 @@ export default function PersonasApp({ t }) {
       )}
 
       {/* ==========================================================================
-         Draft with AI Modal
+         Draft with AI Modal (Matching UI layout in Theme)
          ========================================================================== */}
       {isAiModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsAiModalOpen(false)}>
-          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div className="modal-title-group">
-                <SparklesIcon width={20} height={20} style={{ color: "#0C66E4" }} />
-                <h3 className="modal-title">Draft Persona with AI</h3>
+        <div
+          className="modal-overlay ai-modal-overlay"
+          onClick={() => !isAiGenerating && setIsAiModalOpen(false)}
+        >
+          <div className="modal-dialog ai-draft-dialog" onClick={(e) => e.stopPropagation()}>
+            {/* Header Banner */}
+            <div className="ai-modal-header">
+              <div className="ai-header-left">
+                <div className="ai-header-icon-badge">
+                  <SparklesIcon width={22} height={22} />
+                </div>
+                <div className="ai-header-text">
+                  <div className="ai-header-title-row">
+                    <h3 className="ai-header-title">Draft Persona with AI</h3>
+                    <span className="ai-gemini-pill">Gemini 3.8 Flash</span>
+                  </div>
+                  <p className="ai-header-subtitle">
+                    Describe a user archetype or problem space — AI will generate demographic data,
+                    pain points, motivations &amp; goals.
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
-                className="btn-subtle-icon"
-                onClick={() => setIsAiModalOpen(false)}
+                className="ai-header-close-btn"
+                onClick={() => !isAiGenerating && setIsAiModalOpen(false)}
+                aria-label="Close modal"
               >
                 <XCloseIcon width={16} height={16} />
               </button>
             </div>
 
-            <div className="modal-body">
-              <p style={{ fontSize: "13px", color: "#626F86", marginTop: 0 }}>
-                Select an agile product archetype or enter a custom prompt to synthesize
-                a complete persona profile with motivations, pain points, and quote.
-              </p>
+            {/* Modal Body */}
+            <div className="modal-body ai-draft-body">
+              <label className="ai-section-label">
+                WHAT KIND OF USER PERSONA DO YOU WANT TO CREATE?
+              </label>
 
-              <div className="form-group">
-                <label className="form-label">Choose Archetype</label>
-                <div className="ai-template-grid">
-                  {AI_TEMPLATES.map((tmpl, idx) => (
-                    <div
-                      key={idx}
-                      className={`ai-template-card ${
-                        aiSelectedTemplate === idx ? "active" : ""
-                      }`}
-                      onClick={() => setAiSelectedTemplate(idx)}
-                    >
-                      <div className="ai-template-name">{tmpl.name}</div>
-                      <div className="ai-template-desc">{tmpl.role}</div>
-                    </div>
-                  ))}
-                </div>
+              <textarea
+                className="ai-prompt-textarea"
+                rows={4}
+                placeholder="e.g. Startup founder who struggles to prioritize sprint backlog items and needs clear user empathy for every ticket..."
+                value={aiPrompt}
+                onChange={(e) => {
+                  setAiPrompt(e.target.value);
+                  setAiSelectedExampleIdx(null);
+                }}
+                disabled={isAiGenerating}
+                autoFocus
+              />
+
+              <div className="ai-subrow">
+                <span className="ai-subrow-hint">
+                  Be as specific as you like, or just provide a role &amp; frustration.
+                </span>
+                <span className="ai-subrow-chars">{aiPrompt.length} chars</span>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Or Custom Role / Audience</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="e.g. Freelance Graphic Designer, Medical Clinic Manager..."
-                  value={aiPrompt}
-                  onChange={(e) => setAiPrompt(e.target.value)}
-                />
+              {/* Example Prompts */}
+              <div className="ai-examples-section">
+                <div className="ai-examples-title">
+                  <span className="ai-bulb-icon">💡</span>
+                  <span>Try an example prompt:</span>
+                </div>
+                <div className="ai-examples-grid">
+                  {EXAMPLE_PROMPTS.map((item, idx) => {
+                    const isSelected =
+                      aiPrompt === item.prompt || aiSelectedExampleIdx === idx;
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        className={`ai-example-chip ${isSelected ? "active" : ""}`}
+                        onClick={() => {
+                          setAiPrompt(item.prompt);
+                          setAiSelectedExampleIdx(idx);
+                        }}
+                        disabled={isAiGenerating}
+                        title={item.prompt}
+                      >
+                        {item.chip}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
-            <div className="modal-footer">
+            {/* Modal Footer */}
+            <div className="modal-footer ai-modal-footer">
               <button
                 type="button"
-                className="btn-secondary"
+                className="ai-btn-cancel"
                 onClick={() => setIsAiModalOpen(false)}
                 disabled={isAiGenerating}
               >
@@ -1697,12 +1714,16 @@ export default function PersonasApp({ t }) {
               </button>
               <button
                 type="button"
-                className="btn-draft-ai"
+                className="btn-draft-ai ai-btn-generate"
                 onClick={handleGenerateAiPersona}
-                disabled={isAiGenerating}
+                disabled={isAiGenerating || (!aiPrompt.trim() && aiSelectedExampleIdx === null)}
               >
-                <SparklesIcon width={16} height={16} />
-                <span>{isAiGenerating ? "Synthesizing Persona…" : "Generate & Add Persona"}</span>
+                <SparklesIcon
+                  width={16}
+                  height={16}
+                  className={isAiGenerating ? "ai-spin-icon" : ""}
+                />
+                <span>{isAiGenerating ? "Drafting with Gemini…" : "Draft Persona"}</span>
               </button>
             </div>
           </div>
