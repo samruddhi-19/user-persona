@@ -86,11 +86,12 @@ TrelloPowerUp.initialize({
   // Adds a User Persona button on the back of every card with live count
   "card-buttons": async function (t) {
     const attachedIds = (await t.get("card", "shared", "attachedPersonaIds")) || [];
-    const count = attachedIds.length;
+    const boardPersonas = (await t.get("board", "shared", "personas")) || [];
+    const validCount = boardPersonas.filter((p) => attachedIds.includes(p.id)).length;
     return [
       {
         icon: ICON_URL,
-        text: count > 0 ? `User Persona (${count})` : "User Persona",
+        text: validCount > 0 ? `User Persona (${validCount})` : "User Persona",
         callback: function (t) {
           return t.popup({
             title: "Attach Personas",
@@ -102,30 +103,56 @@ TrelloPowerUp.initialize({
     ];
   },
 
-  // Badge displayed on the front of cards in board list columns
+  // Badge displayed on the front of cards in board list columns showing persona icon and name
   "card-badges": async function (t) {
     const attachedIds = (await t.get("card", "shared", "attachedPersonaIds")) || [];
-    if (!attachedIds.length) return [];
+    if (!attachedIds || !attachedIds.length) return [];
 
-    return [
-      {
-        text: `${attachedIds.length} Persona${attachedIds.length > 1 ? "s" : ""}`,
-        icon: ICON_URL,
-        color: "blue",
-      },
-    ];
+    const boardPersonas = (await t.get("board", "shared", "personas")) || [];
+    const validPersonas = boardPersonas.filter((p) => attachedIds.includes(p.id));
+    if (!validPersonas.length) return [];
+
+    return validPersonas.map((persona) => {
+      let icon = ICON_URL;
+      if (persona.avatar) {
+        if (persona.avatar.startsWith("http")) {
+          icon = persona.avatar;
+        } else if (typeof window !== "undefined" && window.location.origin) {
+          icon = `${window.location.origin}${persona.avatar.replace(/^\./, "")}`;
+        }
+      }
+
+      return {
+        text: persona.name,
+        icon: icon,
+        color: null,
+      };
+    });
   },
 
   // Badge displayed in the card back detail section header
   "card-detail-badges": async function (t) {
     const attachedIds = (await t.get("card", "shared", "attachedPersonaIds")) || [];
-    if (!attachedIds.length) return [];
+    if (!attachedIds || !attachedIds.length) return [];
 
-    return [
-      {
-        title: "Target Personas",
-        text: `${attachedIds.length} Attached`,
-        color: "blue",
+    const boardPersonas = (await t.get("board", "shared", "personas")) || [];
+    const validPersonas = boardPersonas.filter((p) => attachedIds.includes(p.id));
+    if (!validPersonas.length) return [];
+
+    return validPersonas.map((persona) => {
+      let icon = ICON_URL;
+      if (persona.avatar) {
+        if (persona.avatar.startsWith("http")) {
+          icon = persona.avatar;
+        } else if (typeof window !== "undefined" && window.location.origin) {
+          icon = `${window.location.origin}${persona.avatar.replace(/^\./, "")}`;
+        }
+      }
+
+      return {
+        title: "Target Persona",
+        text: persona.name,
+        icon: icon,
         callback: function (t) {
           return t.popup({
             title: "Attach Personas",
@@ -133,7 +160,7 @@ TrelloPowerUp.initialize({
             height: 380,
           });
         },
-      },
-    ];
+      };
+    });
   },
 });

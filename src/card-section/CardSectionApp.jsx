@@ -16,10 +16,16 @@ export default function CardSectionApp({ t }) {
       }
 
       let cardAttached = await t.get("card", "shared", "attachedPersonaIds");
-      // Default to Maya Lin and Marcus Vance for initial demo preview matching screenshot
       if (!cardAttached || !Array.isArray(cardAttached)) {
-        cardAttached = ["persona-maya-lin", "persona-marcus-vance"];
-        await t.set("card", "shared", "attachedPersonaIds", cardAttached);
+        cardAttached = [];
+      } else {
+        // Sanitize: automatically purge any stale or non-existent IDs from card storage
+        const cleaned = cardAttached.filter((id) => bPersonas.some((p) => p.id === id));
+        if (cleaned.length !== cardAttached.length) {
+          cardAttached = cleaned;
+          await t.set("card", "shared", "attachedPersonaIds", cleaned);
+          localStorage.setItem("trello_card_shared_attachedPersonaIds", JSON.stringify(cleaned));
+        }
       }
 
       setBoardPersonas(bPersonas);
@@ -27,7 +33,7 @@ export default function CardSectionApp({ t }) {
     } catch (err) {
       console.error("Error loading card section data:", err);
       setBoardPersonas(SAMPLE_PERSONAS);
-      setAttachedIds(["persona-maya-lin", "persona-marcus-vance"]);
+      setAttachedIds([]);
     } finally {
       setLoading(false);
     }
@@ -108,33 +114,12 @@ export default function CardSectionApp({ t }) {
 
   return (
     <div className="card-section-wrapper" id="root">
-      {/* Header */}
-      <div className="card-section-header">
-        <div className="card-section-title-group">
-          <span className="card-section-title-icon">
-            <UserPersonaIcon width={16} height={16} strokeWidth={2.2} />
-          </span>
-          <h3 className="card-section-heading">
-            TARGET USER PERSONAS <span className="card-section-count">({attachedPersonas.length})</span>
-          </h3>
-        </div>
-
-        <button type="button" className="btn-add-persona-pill" onClick={openAttachPopup}>
-          <PlusIcon width={13} height={13} strokeWidth={2.5} />
-          <span>Add Persona</span>
-        </button>
-      </div>
-
-      {/* Persona Cards */}
+      {/* Persona Cards List */}
       {attachedPersonas.length === 0 ? (
         <div className="card-section-empty">
           <p className="card-section-empty-text">
-            No target user personas attached to this card yet.
+            No target personas attached yet. Click <b>+ Add Persona</b> above to connect user empathy to this card.
           </p>
-          <button type="button" className="btn-attach-empty" onClick={openAttachPopup}>
-            <PlusIcon width={14} height={14} />
-            <span>Attach Target Persona</span>
-          </button>
         </div>
       ) : (
         <div className="attached-personas-list">
