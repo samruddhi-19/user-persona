@@ -123,30 +123,6 @@
   margin: 0 auto;
 }
 
-.btn-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: var(--ads-surface-card);
-  border: 1px solid var(--ads-border);
-  color: var(--ads-text-subtle);
-  padding: 9px 15px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: inherit;
-  flex-shrink: 0;
-}
-
-.btn-back:hover {
-  background-color: var(--ads-surface-hover);
-  color: var(--ads-text-primary);
-  border-color: var(--trello-blue);
-  transform: translateX(-2px);
-}
-
 .search-input-wrapper {
   position: relative;
   flex: 1;
@@ -2452,6 +2428,132 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ==========================================================================
+   In-App Confirmation Modal (Replaces browser window.confirm / alert)
+   ========================================================================== */
+.confirm-modal-overlay {
+  background-color: rgba(9, 12, 16, 0.82);
+  backdrop-filter: blur(5px);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.confirm-dialog {
+  max-width: 440px;
+  width: 100%;
+  background: var(--ads-surface-card);
+  border: 1px solid var(--ads-border);
+  border-radius: 14px;
+  padding: 26px 24px;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  animation: modalPop 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.confirm-icon-row {
+  margin-bottom: 16px;
+}
+
+.confirm-icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(87, 157, 255, 0.12);
+  color: var(--trello-blue);
+  border: 1px solid rgba(87, 157, 255, 0.25);
+}
+
+.confirm-icon-circle.danger {
+  background: rgba(248, 113, 104, 0.14);
+  color: #f87168;
+  border-color: rgba(248, 113, 104, 0.32);
+}
+
+.confirm-dialog-title {
+  font-family: "Outfit", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ads-text-primary);
+  margin: 0 0 8px 0;
+}
+
+.confirm-dialog-message {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ads-text-subtle);
+  margin: 0 0 22px 0;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.confirm-btn-cancel {
+  flex: 1;
+  background: var(--ads-surface-inset);
+  border: 1px solid var(--ads-border);
+  color: var(--ads-text-subtle);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.confirm-btn-cancel:hover {
+  background: var(--ads-surface-hover);
+  color: var(--ads-text-primary);
+  border-color: #4b5563;
+}
+
+.confirm-btn-action {
+  flex: 1;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.confirm-btn-action.destructive {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.confirm-btn-action.destructive:hover {
+  background: #b91c1c;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.45);
+}
+
+.confirm-btn-action.primary {
+  background: var(--trello-blue);
+  color: #091e42;
+}
+
+.confirm-btn-action.primary:hover {
+  background: var(--trello-blue-hover);
 }
 
 

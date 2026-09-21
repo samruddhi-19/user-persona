@@ -224,6 +224,7 @@ export default function PersonasApp({ t }) {
   const [aiSelectedExampleIdx, setAiSelectedExampleIdx] = useState(null);
   const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [avatarStyleTab, setAvatarStyleTab] = useState("real");
+  const [confirmDialog, setConfirmDialog] = useState(null);
 
   // Form fields matching the new persona fields modal
   const [formData, setFormData] = useState({
@@ -506,12 +507,20 @@ export default function PersonasApp({ t }) {
   }
 
   // Delete Persona
-  async function handleDeletePersona(persona) {
-    if (window.confirm(`Are you sure you want to delete "${persona.name}"?`)) {
-      const updated = personas.filter((p) => p.id !== persona.id);
-      await persistPersonas(updated);
-      showToast(`Deleted "${persona.name}"`);
-    }
+  function handleDeletePersona(persona) {
+    setConfirmDialog({
+      title: `Delete "${persona.name}"?`,
+      message: `Are you sure you want to delete ${persona.name}? This will permanently remove the persona and detach them from any assigned cards.`,
+      confirmLabel: "Delete Persona",
+      cancelLabel: "Cancel",
+      isDestructive: true,
+      onConfirm: async () => {
+        const updated = personas.filter((p) => p.id !== persona.id);
+        await persistPersonas(updated);
+        showToast(`Deleted "${persona.name}"`);
+        setConfirmDialog(null);
+      },
+    });
   }
 
   // Load Demo Personas (Maya Lin, Marcus Vance, Chloe Nguyen)
@@ -521,11 +530,19 @@ export default function PersonasApp({ t }) {
   }
 
   // Clear all personas (to test empty state)
-  async function handleClearAll() {
-    if (window.confirm("Clear all personas to test the initial empty state?")) {
-      await persistPersonas([]);
-      showToast("Cleared all personas — initial state active.");
-    }
+  function handleClearAll() {
+    setConfirmDialog({
+      title: "Clear All Personas?",
+      message: "Are you sure you want to remove all personas? This will reset your board to the initial empty state.",
+      confirmLabel: "Clear All",
+      cancelLabel: "Cancel",
+      isDestructive: true,
+      onConfirm: async () => {
+        await persistPersonas([]);
+        showToast("Cleared all personas — initial state active.");
+        setConfirmDialog(null);
+      },
+    });
   }
 
   // Pain points slot handlers
@@ -704,16 +721,6 @@ export default function PersonasApp({ t }) {
       {/* Top Header & Search Toolbar */}
       <header className="personas-header">
         <div className="personas-toolbar">
-          <button
-            type="button"
-            className="btn-back"
-            onClick={handleBack}
-            title="Back to Trello Board"
-          >
-            <ArrowLeftIcon width={16} height={16} />
-            <span>Back</span>
-          </button>
-
           <div className="search-input-wrapper">
             <span className="search-icon">
               <SearchIcon width={16} height={16} />
@@ -1724,6 +1731,51 @@ export default function PersonasApp({ t }) {
                   className={isAiGenerating ? "ai-spin-icon" : ""}
                 />
                 <span>{isAiGenerating ? "Drafting with Gemini…" : "Draft Persona"}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom In-App Confirmation Modal (Replaces browser window.confirm / alert) */}
+      {confirmDialog && (
+        <div
+          className="modal-overlay confirm-modal-overlay"
+          onClick={() => setConfirmDialog(null)}
+        >
+          <div
+            className="confirm-dialog"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="confirm-icon-row">
+              <div className={`confirm-icon-circle ${confirmDialog.isDestructive ? "danger" : ""}`}>
+                <TrashIcon width={22} height={22} />
+              </div>
+            </div>
+
+            <h3 className="confirm-dialog-title">{confirmDialog.title}</h3>
+            <p className="confirm-dialog-message">{confirmDialog.message}</p>
+
+            <div className="confirm-dialog-actions">
+              <button
+                type="button"
+                className="confirm-btn-cancel"
+                onClick={() => setConfirmDialog(null)}
+              >
+                {confirmDialog.cancelLabel || "Cancel"}
+              </button>
+              <button
+                type="button"
+                className={`confirm-btn-action ${confirmDialog.isDestructive ? "destructive" : "primary"}`}
+                onClick={() => {
+                  if (typeof confirmDialog.onConfirm === "function") {
+                    confirmDialog.onConfirm();
+                  }
+                }}
+              >
+                {confirmDialog.confirmLabel || "Confirm"}
               </button>
             </div>
           </div>
