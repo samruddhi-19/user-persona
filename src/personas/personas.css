@@ -43,6 +43,55 @@
   --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
+/* ==========================================================================
+   Universal Sleek Dark Scrollbar
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--trello-blue, #579dff);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Remove retro Windows scrollbar buttons completely */
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 .personas-app {
   height: 100vh;
   max-height: 100vh;
@@ -1445,17 +1494,32 @@
   background: var(--ads-surface-card);
 }
 
-.persona-create-body::-webkit-scrollbar {
-  width: 7px;
+.persona-create-body::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.ai-draft-body::-webkit-scrollbar {
+  width: 6px;
 }
 
-.persona-create-body::-webkit-scrollbar-track {
-  background: var(--ads-surface-inset);
+.persona-create-body::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track,
+.ai-draft-body::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.persona-create-body::-webkit-scrollbar-thumb {
-  background: var(--ads-border);
-  border-radius: 4px;
+.persona-create-body::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb,
+.ai-draft-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+
+.persona-create-body::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover,
+.ai-draft-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.38);
 }
 
 /* 1. Choose Avatar Section */

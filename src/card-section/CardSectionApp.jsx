@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
-  UserPersonaIcon,
   XCloseIcon,
-  PlusIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  CompactViewIcon,
-  DetailedViewIcon,
 } from "../lib/icons.jsx";
 import { SAMPLE_PERSONAS } from "../personas/PersonasApp.jsx";
 import "./card-section.css";
@@ -16,18 +12,8 @@ export default function CardSectionApp({ t }) {
   const [attachedIds, setAttachedIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // View density mode: "detailed" | "compact"
-  const [viewMode, setViewMode] = useState(() => {
-    try {
-      return localStorage.getItem("user_personaa_view_mode") || "detailed";
-    } catch {
-      return "detailed";
-    }
-  });
-
-  // Collapsed state tracking
-  const [detailedCollapsed, setDetailedCollapsed] = useState({});
-  const [compactExpanded, setCompactExpanded] = useState({});
+  // Track collapsed state per persona: { [personaId]: boolean }
+  const [collapsedMap, setCollapsedMap] = useState({});
 
   async function loadData() {
     try {
@@ -89,51 +75,35 @@ export default function CardSectionApp({ t }) {
     };
   }, [t]);
 
-  // Dynamic iframe auto-resize when attached cards, view mode, or accordion states change
+  // Dynamic iframe auto-resize whenever attached personas or dropdown collapse states change
   useEffect(() => {
     if (t && typeof t.sizeTo === "function") {
       const timer = setTimeout(() => {
         t.sizeTo("#root");
-      }, 60);
+      }, 50);
       return () => clearTimeout(timer);
     }
-  }, [attachedIds, boardPersonas, viewMode, detailedCollapsed, compactExpanded]);
+  }, [attachedIds, boardPersonas, collapsedMap]);
 
-  function handleSetViewMode(mode) {
-    setViewMode(mode);
-    try {
-      localStorage.setItem("user_personaa_view_mode", mode);
-    } catch (err) {
-      console.error("Failed to persist view mode preference:", err);
-    }
-  }
-
-  function toggleDetailedPersona(personaId) {
-    setDetailedCollapsed((prev) => ({
+  function togglePersonaDropdown(personaId) {
+    setCollapsedMap((prev) => ({
       ...prev,
       [personaId]: !prev[personaId],
     }));
   }
 
-  function toggleCompactPersona(personaId) {
-    setCompactExpanded((prev) => ({
-      ...prev,
-      [personaId]: !prev[personaId],
-    }));
-  }
-
-  function toggleAllDetailed() {
-    const allAreCollapsed = attachedPersonas.every((p) => detailedCollapsed[p.id]);
+  function toggleAllDropdowns() {
+    const allAreCollapsed = attachedPersonas.every((p) => collapsedMap[p.id]);
     if (allAreCollapsed) {
       // Expand all
-      setDetailedCollapsed({});
+      setCollapsedMap({});
     } else {
       // Collapse all
       const nextCollapsed = {};
       attachedPersonas.forEach((p) => {
         nextCollapsed[p.id] = true;
       });
-      setDetailedCollapsed(nextCollapsed);
+      setCollapsedMap(nextCollapsed);
     }
   }
 
@@ -154,9 +124,9 @@ export default function CardSectionApp({ t }) {
     .map((id) => boardPersonas.find((p) => p.id === id))
     .filter(Boolean);
 
-  const allDetailedCollapsed =
+  const allCollapsed =
     attachedPersonas.length > 0 &&
-    attachedPersonas.every((p) => detailedCollapsed[p.id]);
+    attachedPersonas.every((p) => collapsedMap[p.id]);
 
   if (loading) {
     return (
@@ -177,224 +147,109 @@ export default function CardSectionApp({ t }) {
         </div>
       ) : (
         <div className="attached-personas-container">
-          {/* Section Toolbar: Density Toggle & Collapse All */}
+          {/* Section Toolbar: Count badge & Collapse all / Expand all button */}
           <div className="card-section-toolbar">
             <div className="section-toolbar-left">
               <span className="section-count-pill">
-                {attachedPersonas.length} {attachedPersonas.length === 1 ? "Persona" : "Personas"}
+                {attachedPersonas.length} {attachedPersonas.length === 1 ? "Persona" : "Personas"} Attached
               </span>
-              {viewMode === "detailed" && attachedPersonas.length > 1 && (
-                <button
-                  type="button"
-                  className="section-tool-btn"
-                  onClick={toggleAllDetailed}
-                  title={allDetailedCollapsed ? "Expand all persona cards" : "Collapse all persona cards"}
-                >
-                  {allDetailedCollapsed ? "Expand all" : "Collapse all"}
-                </button>
-              )}
             </div>
 
-            {/* Density Selector */}
-            <div className="view-mode-toggle" role="group" aria-label="Persona view mode">
+            <div className="section-toolbar-right">
               <button
                 type="button"
-                className={`view-mode-btn ${viewMode === "compact" ? "active" : ""}`}
-                onClick={() => handleSetViewMode("compact")}
-                title="Compact view (saves vertical card space)"
+                className="section-tool-btn"
+                onClick={toggleAllDropdowns}
+                title={allCollapsed ? "Expand all persona empathy cards" : "Collapse all persona empathy cards to save space"}
               >
-                <CompactViewIcon width={12} height={12} />
-                <span>Compact</span>
-              </button>
-              <button
-                type="button"
-                className={`view-mode-btn ${viewMode === "detailed" ? "active" : ""}`}
-                onClick={() => handleSetViewMode("detailed")}
-                title="Detailed empathy view with pain points & motivations"
-              >
-                <DetailedViewIcon width={12} height={12} />
-                <span>Detailed</span>
+                {allCollapsed ? "Expand all" : "Collapse all"}
               </button>
             </div>
           </div>
 
-          {/* Cards List: Detailed View */}
-          {viewMode === "detailed" ? (
-            <div className="attached-personas-list detailed-list">
-              {attachedPersonas.map((persona) => {
-                const isCollapsed = !!detailedCollapsed[persona.id];
-                const painPoint =
-                  (persona.painPoints && persona.painPoints[0]) ||
-                  "Disconnected user feedback scattered across tools";
-                const motivation =
-                  (persona.motivations && persona.motivations[0]) ||
-                  "Advocating for the end-user throughout every ticket";
+          {/* Persona Cards List with Dropdown Accordions */}
+          <div className="attached-personas-list">
+            {attachedPersonas.map((persona) => {
+              const isCollapsed = !!collapsedMap[persona.id];
+              const painPoint =
+                (persona.painPoints && persona.painPoints[0]) ||
+                "Disconnected user feedback scattered across tools";
+              const motivation =
+                (persona.motivations && persona.motivations[0]) ||
+                "Advocating for the end-user throughout every ticket";
 
-                return (
+              return (
+                <div
+                  key={persona.id}
+                  className={`attached-persona-card ${isCollapsed ? "is-collapsed" : ""}`}
+                >
+                  {/* Header Row: click to toggle dropdown accordion */}
                   <div
-                    key={persona.id}
-                    className={`attached-persona-card ${isCollapsed ? "is-collapsed" : ""}`}
+                    className="persona-card-top-row"
+                    onClick={() => togglePersonaDropdown(persona.id)}
+                    title={isCollapsed ? "Click to expand empathy details" : "Click to collapse card"}
                   >
-                    {/* Header Row: clickable to toggle accordion */}
-                    <div
-                      className="persona-card-top-row"
-                      onClick={() => toggleDetailedPersona(persona.id)}
-                      title={isCollapsed ? "Click to expand details" : "Click to collapse"}
-                    >
-                      <div className="persona-card-meta-left">
-                        <img
-                          src={persona.avatar || "./avatars/avatar-3.png"}
-                          alt={persona.name}
-                          className="persona-card-avatar"
-                        />
-                        <div className="persona-card-headings">
-                          <div className="persona-card-name-row">
-                            <span className="persona-card-name">{persona.name}</span>
-                            {persona.age && (
-                              <span className="persona-card-age-badge">Age {persona.age}</span>
-                            )}
-                          </div>
-                          <div className="persona-card-role-sub">
-                            {persona.role} {persona.category ? `• ${persona.category}` : ""}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="persona-card-actions-right">
-                        <button
-                          type="button"
-                          className="persona-card-chevron-btn"
-                          aria-label={isCollapsed ? "Expand persona" : "Collapse persona"}
-                        >
-                          {isCollapsed ? (
-                            <ChevronDownIcon width={15} height={15} />
-                          ) : (
-                            <ChevronUpIcon width={15} height={15} />
+                    <div className="persona-card-meta-left">
+                      <img
+                        src={persona.avatar || "./avatars/avatar-3.png"}
+                        alt={persona.name}
+                        className="persona-card-avatar"
+                      />
+                      <div className="persona-card-headings">
+                        <div className="persona-card-name-row">
+                          <span className="persona-card-name">{persona.name}</span>
+                          {persona.age && (
+                            <span className="persona-card-age-badge">Age {persona.age}</span>
                           )}
-                        </button>
-                        <button
-                          type="button"
-                          className="persona-card-remove-btn"
-                          onClick={(e) => handleDetach(persona.id, e)}
-                          title={`Detach ${persona.name}`}
-                          aria-label={`Detach ${persona.name}`}
-                        >
-                          <XCloseIcon width={14} height={14} />
-                        </button>
+                        </div>
+                        <div className="persona-card-role-sub">
+                          {persona.role} {persona.category ? `• ${persona.category}` : ""}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Empathy Grid: conditionally collapsed */}
-                    {!isCollapsed && (
-                      <div className="persona-callout-grid">
-                        <div className="persona-callout-box pain-box">
-                          <span className="callout-box-title pain-title">KEY PAIN POINT:</span>
-                          <p className="callout-box-content">{painPoint}</p>
-                        </div>
-
-                        <div className="persona-callout-box mot-box">
-                          <span className="callout-box-title mot-title">PRIMARY MOTIVATION:</span>
-                          <p className="callout-box-content">{motivation}</p>
-                        </div>
-                      </div>
-                    )}
+                    <div className="persona-card-actions-right">
+                      <button
+                        type="button"
+                        className="persona-card-chevron-btn"
+                        aria-label={isCollapsed ? "Expand details" : "Collapse details"}
+                      >
+                        {isCollapsed ? (
+                          <ChevronDownIcon width={16} height={16} />
+                        ) : (
+                          <ChevronUpIcon width={16} height={16} />
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        className="persona-card-remove-btn"
+                        onClick={(e) => handleDetach(persona.id, e)}
+                        title={`Detach ${persona.name}`}
+                        aria-label={`Detach ${persona.name}`}
+                      >
+                        <XCloseIcon width={14} height={14} />
+                      </button>
+                    </div>
                   </div>
-                );
-              })}
-            </div>
-          ) : (
-            /* Cards List: Compact View */
-            <div className="attached-personas-list compact-list">
-              {attachedPersonas.map((persona) => {
-                const isExpanded = !!compactExpanded[persona.id];
-                const painPoint =
-                  (persona.painPoints && persona.painPoints[0]) ||
-                  "Disconnected user feedback scattered across tools";
-                const motivation =
-                  (persona.motivations && persona.motivations[0]) ||
-                  "Advocating for the end-user throughout every ticket";
 
-                return (
-                  <div
-                    key={persona.id}
-                    className={`compact-persona-item ${isExpanded ? "is-expanded" : ""}`}
-                  >
-                    <div
-                      className="compact-persona-bar"
-                      onClick={() => toggleCompactPersona(persona.id)}
-                      title={isExpanded ? "Hide empathy details" : "Click to view empathy details"}
-                    >
-                      <div className="compact-persona-left">
-                        <img
-                          src={persona.avatar || "./avatars/avatar-3.png"}
-                          alt={persona.name}
-                          className="compact-avatar"
-                        />
-                        <div className="compact-info">
-                          <div className="compact-title-row">
-                            <span className="compact-name">{persona.name}</span>
-                            {persona.age && (
-                              <span className="compact-age-pill">Age {persona.age}</span>
-                            )}
-                          </div>
-                          <span className="compact-role">
-                            {persona.role}
-                            {persona.category ? ` • ${persona.category}` : ""}
-                          </span>
-                        </div>
+                  {/* Dropdown Content: Empathy Callouts (hidden when collapsed) */}
+                  {!isCollapsed && (
+                    <div className="persona-callout-grid">
+                      <div className="persona-callout-box pain-box">
+                        <span className="callout-box-title pain-title">KEY PAIN POINT:</span>
+                        <p className="callout-box-content">{painPoint}</p>
                       </div>
 
-                      {/* Brief insight teaser (desktop / wide) */}
-                      <div className="compact-snippet-teaser" title={painPoint}>
-                        <span className="compact-snippet-tag">Pain:</span>
-                        <span className="compact-snippet-text">{painPoint}</span>
-                      </div>
-
-                      <div className="compact-actions-right">
-                        <button
-                          type="button"
-                          className="compact-chevron-btn"
-                          aria-label={isExpanded ? "Hide details" : "Show details"}
-                        >
-                          {isExpanded ? (
-                            <ChevronUpIcon width={14} height={14} />
-                          ) : (
-                            <ChevronDownIcon width={14} height={14} />
-                          )}
-                        </button>
-                        <button
-                          type="button"
-                          className="compact-remove-btn"
-                          onClick={(e) => handleDetach(persona.id, e)}
-                          title={`Detach ${persona.name}`}
-                          aria-label={`Detach ${persona.name}`}
-                        >
-                          <XCloseIcon width={13} height={13} />
-                        </button>
+                      <div className="persona-callout-box mot-box">
+                        <span className="callout-box-title mot-title">PRIMARY MOTIVATION:</span>
+                        <p className="callout-box-content">{motivation}</p>
                       </div>
                     </div>
-
-                    {/* Inline empathy expansion when opened in compact mode */}
-                    {isExpanded && (
-                      <div className="compact-expanded-details">
-                        <div className="persona-callout-grid">
-                          <div className="persona-callout-box pain-box">
-                            <span className="callout-box-title pain-title">KEY PAIN POINT:</span>
-                            <p className="callout-box-content">{painPoint}</p>
-                          </div>
-
-                          <div className="persona-callout-box mot-box">
-                            <span className="callout-box-title mot-title">PRIMARY MOTIVATION:</span>
-                            <p className="callout-box-content">{motivation}</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
