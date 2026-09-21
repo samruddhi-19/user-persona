@@ -6,6 +6,18 @@ const ICON_URL =
     ? `${window.location.origin}/icons/icon.svg`
     : "./icons/icon.svg";
 
+function resolveAssetUrl(path) {
+  if (!path) return ICON_URL;
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
+    return path;
+  }
+  if (typeof window !== "undefined" && window.location.origin) {
+    const cleanPath = path.replace(/^\.?\//, "");
+    return `${window.location.origin}/${cleanPath}`;
+  }
+  return path;
+}
+
 TrelloPowerUp.initialize({
   // Trello queries this capability to decide whether to prompt the member to authorize
   "authorization-status": async function (t) {
@@ -113,19 +125,12 @@ TrelloPowerUp.initialize({
     if (!validPersonas.length) return [];
 
     return validPersonas.map((persona) => {
-      let icon = ICON_URL;
-      if (persona.avatar) {
-        if (persona.avatar.startsWith("http")) {
-          icon = persona.avatar;
-        } else if (typeof window !== "undefined" && window.location.origin) {
-          icon = `${window.location.origin}${persona.avatar.replace(/^\./, "")}`;
-        }
-      }
+      const avatarUrl = resolveAssetUrl(persona.avatar);
 
       return {
         text: persona.name,
-        icon: icon,
-        color: null,
+        icon: avatarUrl,
+        monochrome: false,
       };
     });
   },
@@ -140,19 +145,13 @@ TrelloPowerUp.initialize({
     if (!validPersonas.length) return [];
 
     return validPersonas.map((persona) => {
-      let icon = ICON_URL;
-      if (persona.avatar) {
-        if (persona.avatar.startsWith("http")) {
-          icon = persona.avatar;
-        } else if (typeof window !== "undefined" && window.location.origin) {
-          icon = `${window.location.origin}${persona.avatar.replace(/^\./, "")}`;
-        }
-      }
+      const avatarUrl = resolveAssetUrl(persona.avatar);
 
       return {
         title: "Target Persona",
         text: persona.name,
-        icon: icon,
+        icon: avatarUrl,
+        monochrome: false,
         callback: function (t) {
           return t.popup({
             title: "Attach Personas",
