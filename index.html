@@ -293,6 +293,14 @@
                 <span>Connector Iframe</span>
                 <code>powerup.html</code>
               </button>
+              <button class="nav-pill" onclick="switchPreview('./card-section.html', 'Card Empathy Section (card-section.html)', this)">
+                <span>Card Empathy Section</span>
+                <code>card-section.html</code>
+              </button>
+              <button class="nav-pill" onclick="switchPreview('./attach-popup.html', 'Attach Personas Popup (attach-popup.html)', this)">
+                <span>Attach Personas Popup</span>
+                <code>attach-popup.html</code>
+              </button>
               <button class="nav-pill" onclick="switchPreview('./authorized.html', 'OAuth Callback (authorized.html)', this)">
                 <span>OAuth Return</span>
                 <code>authorized.html</code>
@@ -347,7 +355,7 @@
         document.getElementById("preview-heading").textContent = title;
         document.getElementById("direct-link").href = url;
 
-        if (url.includes("personas.html")) {
+        if (url.includes("personas.html") || url.includes("card-section.html")) {
           wrapper.classList.add("wide-wrapper");
           frame.classList.add("wide-view");
         } else {

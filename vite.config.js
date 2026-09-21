@@ -16,6 +16,8 @@ export default defineConfig({
         auth: resolve(__dirname, "auth.html"),
         settings: resolve(__dirname, "settings.html"),
         personas: resolve(__dirname, "personas.html"),
+        cardSection: resolve(__dirname, "card-section.html"),
+        attachPopup: resolve(__dirname, "attach-popup.html"),
       },
     },
   },

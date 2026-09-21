@@ -1,0 +1,274 @@
+:root {
+  --ads-bg-canvas: #1d2125;
+  --ads-surface-card: #22272b;
+  --ads-surface-hover: #282e33;
+  --ads-surface-inset: #181d22;
+  --ads-border: #333c43;
+  --ads-border-subtle: #2c333a;
+  --ads-text-primary: #f7f8f9;
+  --ads-text-subtle: #9fadbc;
+  --ads-text-muted: #738496;
+  --trello-blue: #579dff;
+  --trello-blue-hover: #85b8ff;
+  --trello-blue-subtle: rgba(87, 157, 255, 0.15);
+
+  --pain-red-bg: rgba(248, 113, 104, 0.1);
+  --pain-red-border: rgba(248, 113, 104, 0.28);
+  --pain-red-text: #f87168;
+
+  --mot-green-bg: rgba(75, 206, 151, 0.1);
+  --mot-green-border: rgba(75, 206, 151, 0.28);
+  --mot-green-text: #4bce97;
+}
+
+.card-section-wrapper {
+  padding: 4px 0 16px;
+  font-family: "Inter", -apple-system, sans-serif;
+  color: var(--ads-text-primary);
+  box-sizing: border-box;
+}
+
+/* Header */
+.card-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.card-section-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-section-title-icon {
+  color: var(--trello-blue);
+  display: flex;
+  align-items: center;
+}
+
+.card-section-heading {
+  font-family: "Outfit", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ads-text-subtle);
+  margin: 0;
+}
+
+.card-section-count {
+  color: var(--ads-text-muted);
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+.btn-add-persona-pill {
+  background: transparent;
+  border: 1px solid var(--trello-blue);
+  color: var(--trello-blue);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.btn-add-persona-pill:hover {
+  background: var(--trello-blue-subtle);
+  color: var(--trello-blue-hover);
+  border-color: var(--trello-blue-hover);
+}
+
+/* Cards List */
+.attached-personas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.attached-persona-card {
+  background: var(--ads-surface-card);
+  border: 1px solid var(--ads-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.18s ease;
+}
+
+.attached-persona-card:hover {
+  border-color: rgba(87, 157, 255, 0.35);
+}
+
+/* Persona Top Row */
+.persona-card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.persona-card-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.persona-card-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--ads-border);
+  background: var(--ads-surface-inset);
+  flex-shrink: 0;
+}
+
+.persona-card-headings {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.persona-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.persona-card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ads-text-primary);
+}
+
+.persona-card-age-badge {
+  background: rgba(87, 157, 255, 0.14);
+  border: 1px solid rgba(87, 157, 255, 0.32);
+  color: var(--trello-blue);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.1px;
+}
+
+.persona-card-role-sub {
+  font-size: 12px;
+  color: var(--ads-text-subtle);
+}
+
+.persona-card-remove-btn {
+  background: transparent;
+  border: none;
+  color: var(--ads-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.persona-card-remove-btn:hover {
+  background: rgba(248, 113, 104, 0.15);
+  color: #f87168;
+}
+
+/* 2-Column Callout Grid */
+.persona-callout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .persona-callout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.persona-callout-box {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.persona-callout-box.pain-box {
+  background: var(--pain-red-bg);
+  border: 1px solid var(--pain-red-border);
+}
+
+.persona-callout-box.mot-box {
+  background: var(--mot-green-bg);
+  border: 1px solid var(--mot-green-border);
+}
+
+.callout-box-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.callout-box-title.pain-title {
+  color: var(--pain-red-text);
+}
+
+.callout-box-title.mot-title {
+  color: var(--mot-green-text);
+}
+
+.callout-box-content {
+  color: var(--ads-text-primary);
+  font-size: 12.5px;
+  margin: 0;
+}
+
+/* Empty State */
+.card-section-empty {
+  background: var(--ads-surface-inset);
+  border: 1px dashed var(--ads-border);
+  border-radius: 10px;
+  padding: 24px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-section-empty-text {
+  color: var(--ads-text-subtle);
+  font-size: 13px;
+  margin: 0;
+}
+
+.btn-attach-empty {
+  margin-top: 4px;
+  background: var(--trello-blue);
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-attach-empty:hover {
+  background: var(--trello-blue-hover);
+}

@@ -60,62 +60,77 @@ TrelloPowerUp.initialize({
     ];
   },
 
-  // Adds a User Persona button on the back of every card
-  "card-buttons": function () {
+  // Card Back Section: Embeds the Empathy Persona Cards directly in card details
+  "card-back-section": function (t) {
+    return {
+      title: "Target User Personas",
+      icon: ICON_URL,
+      content: {
+        type: "iframe",
+        url: t.signUrl("./card-section.html"),
+        height: 250,
+      },
+      action: {
+        text: "+ Add Persona",
+        callback: function (t) {
+          return t.popup({
+            title: "Attach Personas",
+            url: "./attach-popup.html",
+            height: 380,
+          });
+        },
+      },
+    };
+  },
+
+  // Adds a User Persona button on the back of every card with live count
+  "card-buttons": async function (t) {
+    const attachedIds = (await t.get("card", "shared", "attachedPersonaIds")) || [];
+    const count = attachedIds.length;
     return [
       {
         icon: ICON_URL,
-        text: "User Persona",
-        callback: async function (t) {
-          const authorized = await isAuthorized(t);
-          if (!authorized) {
-            return t.popup({
-              title: "Authorize User Personaa",
-              url: "./auth.html",
-              height: 320,
-            });
-          }
-          return t.modal({
-            title: "User Personas",
-            accentColor: "#1D2125",
-            url: "./personas.html",
-            fullscreen: true,
+        text: count > 0 ? `User Persona (${count})` : "User Persona",
+        callback: function (t) {
+          return t.popup({
+            title: "Attach Personas",
+            url: "./attach-popup.html",
+            height: 380,
           });
         },
       },
     ];
   },
 
-  // Badge displayed on the front of cards
+  // Badge displayed on the front of cards in board list columns
   "card-badges": async function (t) {
-    // Allows attaching persona badges to cards
-    const persona = await t.get("card", "shared", "persona");
-    if (!persona || !persona.name) return [];
+    const attachedIds = (await t.get("card", "shared", "attachedPersonaIds")) || [];
+    if (!attachedIds.length) return [];
 
     return [
       {
-        text: persona.name,
+        text: `${attachedIds.length} Persona${attachedIds.length > 1 ? "s" : ""}`,
         icon: ICON_URL,
-        color: persona.color || "purple",
+        color: "blue",
       },
     ];
   },
 
-  // Badge displayed in the card back detail section
+  // Badge displayed in the card back detail section header
   "card-detail-badges": async function (t) {
-    const persona = await t.get("card", "shared", "persona");
-    if (!persona || !persona.name) return [];
+    const attachedIds = (await t.get("card", "shared", "attachedPersonaIds")) || [];
+    if (!attachedIds.length) return [];
 
     return [
       {
-        title: "User Persona",
-        text: persona.name,
-        color: persona.color || "purple",
+        title: "Target Personas",
+        text: `${attachedIds.length} Attached`,
+        color: "blue",
         callback: function (t) {
           return t.popup({
-            title: "User Personaa Settings",
-            url: "./settings.html",
-            height: 280,
+            title: "Attach Personas",
+            url: "./attach-popup.html",
+            height: 380,
           });
         },
       },
