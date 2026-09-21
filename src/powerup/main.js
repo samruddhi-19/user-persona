@@ -126,9 +126,10 @@ TrelloPowerUp.initialize({
 
     return validPersonas.map((persona) => {
       const avatarUrl = resolveAssetUrl(persona.avatar);
+      const firstName = persona.name ? persona.name.trim().split(/\s+/)[0] : "Persona";
 
       return {
-        text: persona.name,
+        text: firstName,
         icon: avatarUrl,
         monochrome: false,
       };

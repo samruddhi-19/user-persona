@@ -28,67 +28,93 @@
   box-sizing: border-box;
 }
 
-/* Header */
-.card-section-header {
+/* Toolbar: Density switcher & collapse all */
+.card-section-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  padding: 0 2px;
 }
 
-.card-section-title-group {
+.section-toolbar-left {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.card-section-title-icon {
-  color: var(--trello-blue);
-  display: flex;
-  align-items: center;
-}
-
-.card-section-heading {
-  font-family: "Outfit", sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+.section-count-pill {
+  font-size: 11px;
+  font-weight: 600;
   color: var(--ads-text-subtle);
-  margin: 0;
+  background: var(--ads-surface-inset);
+  border: 1px solid var(--ads-border-subtle);
+  padding: 2.5px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
 }
 
-.card-section-count {
-  color: var(--ads-text-muted);
-  font-weight: 600;
-  margin-left: 2px;
-}
-
-.btn-add-persona-pill {
+.section-tool-btn {
   background: transparent;
-  border: 1px solid var(--trello-blue);
-  color: var(--trello-blue);
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 12px;
+  border: none;
+  font-size: 11.5px;
   font-weight: 600;
+  color: var(--trello-blue);
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
   transition: all 0.15s ease;
 }
 
-.btn-add-persona-pill:hover {
+.section-tool-btn:hover {
   background: var(--trello-blue-subtle);
   color: var(--trello-blue-hover);
-  border-color: var(--trello-blue-hover);
 }
 
-/* Cards List */
+.view-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: var(--ads-surface-inset);
+  border: 1px solid var(--ads-border);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.view-mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--ads-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3.5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+}
+
+.view-mode-btn:hover {
+  color: var(--ads-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.view-mode-btn.active {
+  background: var(--ads-surface-card);
+  color: var(--trello-blue);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--ads-border-subtle);
+}
+
+/* Detailed Cards List */
 .attached-personas-list {
   display: flex;
   flex-direction: column;
+}
+
+.detailed-list {
   gap: 12px;
 }
 
@@ -96,21 +122,31 @@
   background: var(--ads-surface-card);
   border: 1px solid var(--ads-border);
   border-radius: 10px;
-  padding: 14px 16px;
+  padding: 13px 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-  transition: border-color 0.18s ease;
+  transition: border-color 0.18s ease, padding 0.18s ease;
 }
 
 .attached-persona-card:hover {
   border-color: rgba(87, 157, 255, 0.35);
 }
 
+.attached-persona-card.is-collapsed {
+  padding: 10px 14px;
+}
+
+.attached-persona-card.is-collapsed .persona-card-top-row {
+  margin-bottom: 0;
+}
+
 /* Persona Top Row */
 .persona-card-top-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .persona-card-meta-left {
@@ -120,8 +156,8 @@
 }
 
 .persona-card-avatar {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid var(--ads-border);
@@ -142,7 +178,7 @@
 }
 
 .persona-card-name {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--ads-text-primary);
 }
@@ -153,14 +189,38 @@
   color: var(--trello-blue);
   font-size: 11px;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 1.5px 7px;
   border-radius: 9999px;
   letter-spacing: 0.1px;
 }
 
 .persona-card-role-sub {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--ads-text-subtle);
+}
+
+.persona-card-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.persona-card-chevron-btn {
+  background: transparent;
+  border: none;
+  color: var(--ads-text-muted);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.persona-card-chevron-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ads-text-primary);
 }
 
 .persona-card-remove-btn {
@@ -168,7 +228,7 @@
   border: none;
   color: var(--ads-text-muted);
   cursor: pointer;
-  padding: 4px;
+  padding: 5px;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -185,7 +245,7 @@
 .persona-callout-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 @media (max-width: 600px) {
@@ -195,8 +255,8 @@
 }
 
 .persona-callout-box {
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 9px 11px;
+  border-radius: 7px;
   font-size: 12px;
   line-height: 1.45;
 }
@@ -212,11 +272,11 @@
 }
 
 .callout-box-title {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   display: block;
 }
 
@@ -230,8 +290,168 @@
 
 .callout-box-content {
   color: var(--ads-text-primary);
-  font-size: 12.5px;
+  font-size: 12px;
   margin: 0;
+}
+
+/* ==========================================================================
+   COMPACT VIEW STYLES (Space-saving 42px row)
+   ========================================================================== */
+.compact-list {
+  gap: 6px;
+}
+
+.compact-persona-item {
+  background: var(--ads-surface-card);
+  border: 1px solid var(--ads-border);
+  border-radius: 8px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  overflow: hidden;
+}
+
+.compact-persona-item:hover {
+  border-color: rgba(87, 157, 255, 0.38);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.compact-persona-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+  min-height: 42px;
+  box-sizing: border-box;
+}
+
+.compact-persona-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.compact-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--ads-border);
+  background: var(--ads-surface-inset);
+  flex-shrink: 0;
+}
+
+.compact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.compact-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.compact-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ads-text-primary);
+}
+
+.compact-age-pill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(87, 157, 255, 0.12);
+  color: var(--trello-blue);
+}
+
+.compact-role {
+  font-size: 11px;
+  color: var(--ads-text-subtle);
+  max-width: 190px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compact-snippet-teaser {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 8px;
+  font-size: 11px;
+  color: var(--ads-text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 3px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+  .compact-snippet-teaser {
+    display: none;
+  }
+}
+
+.compact-snippet-tag {
+  color: #f87168;
+  font-weight: 700;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.compact-snippet-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compact-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.compact-chevron-btn,
+.compact-remove-btn {
+  background: transparent;
+  border: none;
+  color: var(--ads-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.compact-chevron-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ads-text-primary);
+}
+
+.compact-remove-btn:hover {
+  background: rgba(248, 113, 104, 0.15);
+  color: #f87168;
+}
+
+.compact-expanded-details {
+  padding: 0 10px 10px 10px;
+  border-top: 1px solid var(--ads-border-subtle);
+  margin-top: 2px;
+  padding-top: 8px;
 }
 
 /* Empty State */
@@ -251,24 +471,4 @@
   color: var(--ads-text-subtle);
   font-size: 13px;
   margin: 0;
-}
-
-.btn-attach-empty {
-  margin-top: 4px;
-  background: var(--trello-blue);
-  color: #ffffff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.15s ease;
-}
-
-.btn-attach-empty:hover {
-  background: var(--trello-blue-hover);
 }
